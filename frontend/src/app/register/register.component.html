@@ -1,0 +1,32 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome to our project</h5>
+                    <form>
+                        <div class="mb-3">
+                            <label for="employeename" class="form-label">Employee Name:</label>
+                            <input type="text" class="form-control" [(ngModel)]="employeename"
+                                [ngModelOptions]="{standalone: true}" id="employeename" name="employeename">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" [(ngModel)]="email"
+                                [ngModelOptions]="{standalone: true}" id="email" name="email">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password:</label>
+                            <input type="password" class="form-control" [(ngModel)]="password"
+                                [ngModelOptions]="{standalone: true}" id="password" name="password">
+                        </div>
+
+                        <button type="button" class="btn btn-primary" (click)="save()">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
