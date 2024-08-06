@@ -14,20 +14,46 @@ public class Employee {
     @Column(name="employee_name", length = 255)
     private String employeename;
 
+    @Column(name="employee_lastname", length = 255)
+    private String employeelastname;
+
+
     @Column(name="email", length = 255)
     private String email;
 
     @Column(name="password", length = 255)
     private String password;
 
-    public Employee(int employeeid, String employeename, String email, String password) {
-        this.employeeid = employeeid;
+    @Column(name="phone", length = 20)
+    private String phone;
+
+
+    // Constructor with parameters
+    public Employee(String employeename, String employeelastname, String email, String password, String phone) {
         this.employeename = employeename;
+        this.employeelastname = employeelastname;
         this.email = email;
         this.password = password;
+        this.phone = phone;
     }
 
     public Employee() {}
+
+    public String getEmployeelastname() {
+        return employeelastname;
+    }
+
+    public void setEmployeelastname(String employeelastname) {
+        this.employeelastname = employeelastname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public int getEmployeeid() {
         return employeeid;
@@ -67,8 +93,10 @@ public class Employee {
         return "Employee{" +
                 "employeeid=" + employeeid +
                 ", employeename='" + employeename + '\'' +
+                ", employeelastname='" + employeelastname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 }

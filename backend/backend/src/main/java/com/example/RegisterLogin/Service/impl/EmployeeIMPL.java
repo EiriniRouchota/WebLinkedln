@@ -24,10 +24,11 @@ public class EmployeeIMPL implements EmployeeService {
     @Override
     public String addEmployee(EmployeeDTO employeeDTO) {
         Employee employee = new Employee(
-                employeeDTO.getEmployeeid(),
                 employeeDTO.getEmployeename(),
+                employeeDTO.getEmployeelastname(),
                 employeeDTO.getEmail(),
-                this.passwordEncoder.encode(employeeDTO.getPassword())
+                this.passwordEncoder.encode(employeeDTO.getPassword()),
+                employeeDTO.getPhone()
         );
         employeeRepo.save(employee);
         return employee.getEmployeename();

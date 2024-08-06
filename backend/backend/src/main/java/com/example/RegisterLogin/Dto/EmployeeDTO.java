@@ -11,12 +11,17 @@ public class EmployeeDTO {
     private String employeename;
     private String email;
     private String password;
+    private String employeelastname;
+    private String phone;
 
-    public EmployeeDTO(int employeeid, String employeename, String email, String password) {
+    // Constructor with parameters
+    public EmployeeDTO(int employeeid, String employeename, String email, String password, String employeelastname, String phone) {
         this.employeeid = employeeid;
         this.employeename = employeename;
         this.email = email;
         this.password = password;
+        this.employeelastname = employeelastname;
+        this.phone = phone;
     }
 
 
@@ -54,6 +59,22 @@ public class EmployeeDTO {
         this.password = password;
     }
 
+    public String getEmployeelastname() {
+        return employeelastname;
+    }
+
+    public void setEmployeelastname(String employeelastname) {
+        this.employeelastname = employeelastname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public String toString() {
         return "EmployeeDTO{" +
@@ -61,6 +82,8 @@ public class EmployeeDTO {
                 ", employeename='" + employeename + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", employeelastname='" + employeelastname + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 }
