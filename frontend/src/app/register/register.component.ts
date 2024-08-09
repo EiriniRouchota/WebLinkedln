@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AlertService } from '../alert.service'; // Import the AlertService
+import { AlertService } from '../services/alert.service'; // Import the AlertService
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertService } from '../services/alert.service'; // Import the AlertService
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent {
   email: string = "";
   password: string = "";
 
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private alertService: AlertService) { }
 
   Login(loginForm: NgForm) {
     // Check if the form is valid
@@ -32,11 +33,11 @@ export class LoginComponent {
         console.log(resultData);
 
         if (resultData.message === "Email not exists") {
-          alert("Email does not exist.");
+          this.alertService.showAlert("warning","Email does not exist.");
         } else if (resultData.message === "Login Success") {
           this.router.navigateByUrl('/home');
         } else {
-          alert("Incorrect Email and Password do not match.");
+          this.alertService.showAlert("danger","Incorrect Email and Password do not match.");
         }
       },
       error: (error) => {
