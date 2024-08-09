@@ -23,6 +23,11 @@ public class EmployeeIMPL implements EmployeeService {
 
     @Override
     public String addEmployee(EmployeeDTO employeeDTO) {
+        Employee existingEmployee  = employeeRepo.findByEmail(employeeDTO.getEmail());
+        if (existingEmployee != null){
+
+            return "An employee with this email already exists.";
+        }
         Employee employee = new Employee(
                 employeeDTO.getEmployeename(),
                 employeeDTO.getEmployeelastname(),
