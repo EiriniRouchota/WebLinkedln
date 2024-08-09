@@ -1,29 +1,118 @@
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Welcome to our project</h5>
-                    <form>
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">Join Our Project</h3>
+                    <p class="text-center text-muted mb-4">Please fill in the details to create your account</p>
+                    <form #registerForm="ngForm" (ngSubmit)="save(registerForm)" novalidate>
+                        <!-- Employee Name -->
                         <div class="mb-3">
                             <label for="employeename" class="form-label">Employee Name:</label>
-                            <input type="text" class="form-control" [(ngModel)]="employeename"
-                                [ngModelOptions]="{standalone: true}" id="employeename" name="employeename">
+                            <input type="text" 
+                                   class="form-control" 
+                                   [(ngModel)]="employeename" 
+                                   required 
+                                   id="employeename" 
+                                   name="employeename" 
+                                   placeholder="Enter your first name"
+                                   #employeenameField="ngModel"
+                                   [ngClass]="{'is-invalid': registerForm.submitted && employeenameField.invalid}">
+                            <div *ngIf="registerForm.submitted && employeenameField.invalid" class="invalid-feedback">
+                                Employee Name is required.
+                            </div>
                         </div>
 
+                        <!-- Last Name -->
+                        <div class="mb-3">
+                            <label for="lastname" class="form-label">Last Name:</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   [(ngModel)]="lastname" 
+                                   required 
+                                   id="lastname" 
+                                   name="lastname" 
+                                   placeholder="Enter your last name"
+                                   #lastnameField="ngModel"
+                                   [ngClass]="{'is-invalid': registerForm.submitted && lastnameField.invalid}">
+                            <div *ngIf="registerForm.submitted && lastnameField.invalid" class="invalid-feedback">
+                                Last Name is required.
+                            </div>
+                        </div>
+
+                        <!-- Email -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Email:</label>
-                            <input type="email" class="form-control" [(ngModel)]="email"
-                                [ngModelOptions]="{standalone: true}" id="email" name="email">
+                            <input type="email" 
+                                   class="form-control" 
+                                   [(ngModel)]="email" 
+                                   required 
+                                   id="email" 
+                                   name="email" 
+                                   placeholder="Enter your email address"
+                                   #emailField="ngModel"
+                                   [ngClass]="{'is-invalid': registerForm.submitted && emailField.invalid}">
+                            <div *ngIf="registerForm.submitted && emailField.invalid" class="invalid-feedback">
+                                A valid Email is required.
+                            </div>
                         </div>
 
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone:</label>
+                            <input type="tel" 
+                                   class="form-control" 
+                                   [(ngModel)]="phone" 
+                                   required 
+                                   id="phone" 
+                                   name="phone" 
+                                   placeholder="Enter your phone number"
+                                   #phoneField="ngModel"
+                                   [ngClass]="{'is-invalid': registerForm.submitted && phoneField.invalid}">
+                            <div *ngIf="registerForm.submitted && phoneField.invalid" class="invalid-feedback">
+                                Phone number is required.
+                            </div>
+                        </div>
+
+                        <!-- Password -->
                         <div class="mb-3">
                             <label for="password" class="form-label">Password:</label>
-                            <input type="password" class="form-control" [(ngModel)]="password"
-                                [ngModelOptions]="{standalone: true}" id="password" name="password">
+                            <input type="password" 
+                                   class="form-control" 
+                                   [(ngModel)]="password" 
+                                   required 
+                                   id="password" 
+                                   name="password" 
+                                   placeholder="Enter your password"
+                                   #passwordField="ngModel"
+                                   [ngClass]="{'is-invalid': registerForm.submitted && passwordField.invalid}">
+                            <div *ngIf="registerForm.submitted && passwordField.invalid" class="invalid-feedback">
+                                Password is required.
+                            </div>
                         </div>
 
-                        <button type="button" class="btn btn-primary" (click)="save()">Register</button>
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password:</label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   [(ngModel)]="confirmPassword" 
+                                   required 
+                                   id="confirmPassword" 
+                                   name="confirmPassword" 
+                                   placeholder="Confirm your password"
+                                   #confirmPasswordField="ngModel"
+                                   [ngClass]="{'is-invalid': registerForm.submitted && confirmPasswordField.invalid || registerForm.submitted && confirmPassword !== password}">
+                            <div *ngIf="registerForm.submitted && confirmPasswordField.invalid" class="invalid-feedback">
+                                Confirm Password is required.
+                            </div>
+                            <div *ngIf="registerForm.submitted && confirmPassword !== password" class="invalid-feedback">
+                                Passwords do not match.
+                            </div>
+                        </div>
+
+                        <!-- Register Button -->
+                        <button type="submit" class="btn btn-primary w-100 py-2">Register</button>
                     </form>
                 </div>
             </div>

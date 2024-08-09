@@ -1,24 +1,53 @@
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Login</h5>
-                    <form>
-
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">Weblinkedln</h3>
+                    <p class="text-center text-muted mb-4">Please log in to your account</p>
+                    <form #loginForm="ngForm" (ngSubmit)="Login(loginForm)" novalidate>
+                        <!-- Email Field -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Email:</label>
-                            <input type="email" class="form-control" [(ngModel)]="email"
-                                [ngModelOptions]="{standalone: true}" id="email" name="email">
+                            <input type="email" 
+                                   class="form-control" 
+                                   [(ngModel)]="email" 
+                                   required 
+                                   id="email" 
+                                   name="email" 
+                                   placeholder="Enter your email"
+                                   #emailField="ngModel"
+                                   [ngClass]="{'is-invalid': loginForm.submitted && emailField.invalid}">
+                            <div *ngIf="loginForm.submitted && emailField.invalid" class="invalid-feedback">
+                                Email is required.
+                            </div>
                         </div>
 
+                        <!-- Password Field -->
                         <div class="mb-3">
                             <label for="password" class="form-label">Password:</label>
-                            <input type="password" class="form-control" [(ngModel)]="password"
-                                [ngModelOptions]="{standalone: true}" id="password" name="password">
+                            <input type="password" 
+                                   class="form-control" 
+                                   [(ngModel)]="password" 
+                                   required 
+                                   id="password" 
+                                   name="password" 
+                                   placeholder="Enter your password"
+                                   #passwordField="ngModel"
+                                   [ngClass]="{'is-invalid': loginForm.submitted && passwordField.invalid}">
+                            <div *ngIf="loginForm.submitted && passwordField.invalid" class="invalid-feedback">
+                                Password is required.
+                            </div>
                         </div>
 
-                        <button type="button" class="btn btn-primary" (click)="Login()">Login</button>
+                        <!-- Login Button -->
+                        <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+
+                        <!-- Registration Link -->
+                        <p class="mt-4 text-center">
+                            <span class="text-muted">New to our platform?</span> 
+                            <a href="/register" class="btn btn-outline-primary ms-2 mt-2 w-100">Create an Account</a>
+                        </p>
                     </form>
                 </div>
             </div>

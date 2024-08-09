@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss'] // Note the correct plural form 'styleUrls'
 })
 export class LoginComponent {
 
@@ -14,36 +15,34 @@ export class LoginComponent {
 
   constructor(private router: Router, private http: HttpClient) { }
 
-
-  Login() {
-
-    console.log(this.email);
-    console.log(this.password);
+  Login(loginForm: NgForm) {
+    // Check if the form is valid
+    if (!loginForm.valid) {
+     
+      return;
+    }
 
     let bodyData = {
-
       email: this.email,
       password: this.password
-
     };
 
-    this.http.post("http://localhost:8080/api/v1/employee/login", bodyData).subscribe((resultData: any) => {
-      console.log(resultData);
+    this.http.post("http://localhost:8080/api/v1/employee/login", bodyData).subscribe({
+      next: (resultData: any) => {
+        console.log(resultData);
 
-      if (resultData.message == "Email not exists") {
-        alert("Email does not exist");
-
+        if (resultData.message === "Email not exists") {
+          alert("Email does not exist.");
+        } else if (resultData.message === "Login Success") {
+          this.router.navigateByUrl('/home');
+        } else {
+          alert("Incorrect Email and Password do not match.");
+        }
+      },
+      error: (error) => {
+        console.error("There was an error during the login request", error);
+        alert("An error occurred during login. Please try again later.");
       }
-
-      else if (resultData.message == "Login Success") {
-        this.router.navigateByUrl('/home');
-      }
-
-      else {
-        alert("Incorrect Email and Password not match");
-      }
-
-    })
+    });
   }
-
 }
