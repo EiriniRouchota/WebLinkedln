@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
+import { AlertService } from '../alert.service'; // Import the AlertService
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -16,19 +16,23 @@ export class RegisterComponent {
   phone: string = "";
   password: string = "";
   confirmPassword: string = "";
+  alertMessage: string = '';
+  alertType: string = ''; 
 
-  constructor(private http: HttpClient) { }
+
+
+    constructor(private http: HttpClient, private alertService: AlertService) { } // Inject both services
 
   save(registerForm: NgForm) {
     // Check if the form is valid
     if (!registerForm.valid) {
-      alert("Please fill out all required fields correctly.");
+      this.alertService.showAlert("danger","Please fill out all required fields correctly.");
       return;
     }
   
     // Check if passwords match
     if (this.confirmPassword !== this.password) {
-      alert("Password and confirm password fields must match!");
+      this.alertService.showAlert("danger","Password and confirm password fields must match!");
       return;
     }
   
@@ -46,9 +50,9 @@ export class RegisterComponent {
         next: (resultData: any) => {
           console.log(resultData);
           if (resultData === "An employee with this email already exists.") {
-            alert("An employee with this email already exists.");
+            this.alertService.showAlert("warning","An employee with this email already exists.");
           } else {
-            alert("Employee Registered Successfully");
+            this.alertService.showAlert("success","Employee Registered Successfully");
           }
         },
         error: (error) => {

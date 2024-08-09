@@ -5,6 +5,9 @@
                 <div class="card-body p-4">
                     <h3 class="card-title text-center mb-4">Join Our Project</h3>
                     <p class="text-center text-muted mb-4">Please fill in the details to create your account</p>
+                    <app-alert></app-alert>
+
+
                     <form #registerForm="ngForm" (ngSubmit)="save(registerForm)" novalidate>
                         <!-- Employee Name -->
                         <div class="mb-3">
