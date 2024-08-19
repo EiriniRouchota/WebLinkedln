@@ -2,6 +2,10 @@ package com.example.RegisterLogin.Entity;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.util.Date;
 
 @Entity
 @Table(name="employee")
@@ -27,6 +31,17 @@ public class Employee {
     @Column(name="phone", length = 20)
     private String phone;
 
+    // Adding role with default value
+    @Column(name = "role", length = 50, nullable = false, columnDefinition = "VARCHAR(50) DEFAULT 'USER'")
+    private String role = "USER";
+
+    @CreationTimestamp
+    @Column(updatable = false, name = "created_at")
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     // Constructor with parameters
     public Employee(String employeename, String employeelastname, String email, String password, String phone) {
@@ -35,6 +50,14 @@ public class Employee {
         this.email = email;
         this.password = password;
         this.phone = phone;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Employee() {}
@@ -97,6 +120,7 @@ public class Employee {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }
