@@ -1,0 +1,60 @@
+// Variables
+$primary-color: #0077b5;
+$hover-color: #005582;
+$background-color: #4b1da1;
+$border-color: #e0e0e0;
+
+// Navbar Styling
+.navbar {
+  background-color: $background-color;
+  border-bottom: 1px solid $border-color;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &-brand {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: $primary-color;
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 30px;
+      margin-right: 0.5rem;
+    }
+  }
+
+  .navbar-toggler {
+    @media (min-width: 992px) {
+      display: none;
+    }
+  }
+
+  .navbar-nav {
+    &.mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .nav-item {
+      .nav-link {
+        font-size: 1rem;
+        color: $primary-color;
+        margin: 0 10px;
+
+        &:hover {
+          color: $hover-color;
+        }
+      }
+    }
+
+    .btn {
+      color: $primary-color;
+      border: 1px solid $primary-color;
+
+      &:hover {
+        background-color: #961c1c;
+      }
+    }
+  }
+}

@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { AlertComponent } from './alert/alert.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { MysettingsComponent } from './mysettings/mysettings.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { AlertComponent } from './alert/alert.component';
     RegisterComponent,
     LoginComponent,
     HomeComponent,
-    AlertComponent
+    AlertComponent,
+    NavbarComponent,
+    MysettingsComponent
   ],
   imports: [
     BrowserModule,
