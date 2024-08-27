@@ -31,6 +31,14 @@ export class MySettingsComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.confirmNewPassword != this.newPassword) {
+      this.alertService.showAlert(
+        'warning',
+        'New Password and confirm password must match'
+      );
+      return;
+    }
+
     const token = this.authService.getToken(); // Retrieve the stored token
 
     if (!token) {
