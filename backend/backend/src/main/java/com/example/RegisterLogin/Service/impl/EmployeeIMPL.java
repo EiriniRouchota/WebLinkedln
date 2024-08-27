@@ -7,11 +7,13 @@ import com.example.RegisterLogin.Entity.Employee;
 import com.example.RegisterLogin.Service.EmployeeService;
 import com.example.RegisterLogin.Service.JwtService;
 import com.example.RegisterLogin.response.LoginResponse;
+import com.example.RegisterLogin.response.UpdateEmployeeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.AuthenticationException;
@@ -86,6 +88,43 @@ public class EmployeeIMPL implements EmployeeService {
 
         return users;
     }
+
+
+    @Override
+    public UpdateEmployeeResponse updateEmployee(EmployeeDTO employeeDTO, Employee currentUser) {
+        // Check if the current password is correct
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String manuallyHashedPassword = passwordEncoder.encode(employeeDTO.getPassword());
+        System.out.println("Manually hashed password: " + manuallyHashedPassword);
+
+        if (!passwordEncoder.matches(employeeDTO.getPassword(), currentUser.getPassword())) {
+
+
+            return new UpdateEmployeeResponse("Your password is incorrect", null);
+        }
+
+        // Check if the new email is already in use by another user (excluding the current user)
+        Optional<Employee> existingEmployee = employeeRepo.findByEmail(employeeDTO.getEmail());
+
+        if (existingEmployee.isPresent() && !existingEmployee.get().getEmployeeid().equals(currentUser.getEmployeeid())) {
+            return new UpdateEmployeeResponse("Email is already in use. Try again with a different email.", null);
+        }
+
+
+
+        currentUser.setEmail(employeeDTO.getEmail());
+        // Update password if a new one is provided
+        if (employeeDTO.getNewPassword() != null && !employeeDTO.getNewPassword().isEmpty()) {
+            currentUser.setPassword(passwordEncoder.encode(employeeDTO.getNewPassword()));
+        }
+
+
+        // Save the updated employee back to the repository
+        Employee updatedEmployee = employeeRepo.save(currentUser);
+
+        return new UpdateEmployeeResponse("Profile updated successfully.", updatedEmployee);
+    }
+
 
 
     @Override

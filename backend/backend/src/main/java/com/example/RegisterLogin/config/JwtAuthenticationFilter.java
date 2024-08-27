@@ -1,5 +1,6 @@
 package com.example.RegisterLogin.config;
 
+import com.example.RegisterLogin.Entity.Employee;
 import com.example.RegisterLogin.Service.JwtService;
 
 import jakarta.servlet.FilterChain;
@@ -36,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -51,14 +53,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
-            final String userEmail = jwtService.extractUsername(jwt);
+            final String userId = jwtService.extractUserId(jwt); // Extract the user ID from the token
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (userEmail != null && authentication == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+            if (userId != null && authentication == null) {
+                // Load user by userId, assuming your UserDetailsService can handle this
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId);
+                Employee employee = (Employee) userDetails;
+                Long employeeId = Long.valueOf(employee.getEmployeeid());  // Access employeeid
+                // Validate the token
+                if (jwtService.isTokenValid(jwt, String.valueOf(employeeId))) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
@@ -75,4 +80,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }
+
 }

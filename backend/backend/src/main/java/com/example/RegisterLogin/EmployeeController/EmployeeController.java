@@ -6,6 +6,7 @@ import com.example.RegisterLogin.Entity.Employee;
 import com.example.RegisterLogin.Service.EmployeeService;
 import com.example.RegisterLogin.Service.JwtService;
 import com.example.RegisterLogin.response.LoginResponse;
+import com.example.RegisterLogin.response.UpdateEmployeeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/employee")
 
 
@@ -48,19 +49,34 @@ public class EmployeeController {
     }
 
 
-    @GetMapping(path= "/users")
+    @GetMapping(path= "/auth/users")
     public ResponseEntity<List<Employee>> allUsers() {
         List<Employee> users = employeeService.allUsers();
 
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(path="/users/me")
+    @GetMapping(path="/auth/users/me")
     public ResponseEntity<Employee> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Employee currentUser = (Employee) authentication.getPrincipal();
 
         return ResponseEntity.ok(currentUser);
+    }
+
+
+    @PostMapping(path="/auth/users/me/update")
+
+    public ResponseEntity<?> updateProfile(@RequestBody EmployeeDTO updateProfileRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Employee currentUser = (Employee) authentication.getPrincipal();
+       //Employee currentUser = (Employee) authentication.getDetails(); // Get the email or username from the authentication object
+
+
+        UpdateEmployeeResponse updateduser = employeeService.updateEmployee(updateProfileRequest, currentUser);
+
+
+        return ResponseEntity.ok(updateduser);
     }
 }

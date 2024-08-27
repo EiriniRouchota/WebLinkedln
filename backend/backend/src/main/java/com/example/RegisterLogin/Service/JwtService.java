@@ -1,5 +1,6 @@
 package com.example.RegisterLogin.Service;
 
+import com.example.RegisterLogin.Entity.Employee;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -23,8 +24,8 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public String extractUserId(String token) {
+        return extractClaim(token, Claims::getSubject); // Extract the user ID
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -35,10 +36,15 @@ public class JwtService {
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
-
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+        // Cast UserDetails to Employee to access the employeeid
+        Employee employee = (Employee) userDetails;
+        String userId = String.valueOf(employee.getEmployeeid()); // Convert employeeid to String
+
+        return buildToken(extraClaims, userId, jwtExpiration);
     }
+
+
 
     public long getExpirationTime() {
         return jwtExpiration;
@@ -46,22 +52,23 @@ public class JwtService {
 
     private String buildToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails,
+            String userId,  // Ensure the userId is passed here
             long expiration
     ) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userId)  // Set the user ID as the subject
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+
+    public boolean isTokenValid(String token, String userId) {
+        final String tokenUserId = extractUserId(token);
+        return (tokenUserId.equals(userId)) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

@@ -13,7 +13,7 @@ public class EmployeeDTO {
     private String password;
     private String employeelastname;
     private String phone;
-
+    private String newPassword;
     // Constructor with parameters
     public EmployeeDTO(int employeeid, String employeename, String email, String password, String employeelastname, String phone) {
         this.employeeid = employeeid;
@@ -85,5 +85,13 @@ public class EmployeeDTO {
                 ", employeelastname='" + employeelastname + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }

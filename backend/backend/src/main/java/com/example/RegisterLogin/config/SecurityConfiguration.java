@@ -31,9 +31,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/api/v1/employee/login", "/api/v1/employee/save").permitAll() // Allow these endpoints without authentication
+                        .requestMatchers("/api/v1/employee/auth/**", "/api/v1/employee/login", "/api/v1/employee/save").permitAll() // Allow these endpoints without authentication
                         .anyRequest().authenticated() // Require authentication for all other requests
                 )
                 .sessionManagement(session -> session
@@ -49,12 +50,13 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:8005"));
-        configuration.setAllowedMethods(List.of("GET","POST"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
-
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Add other methods if necessary
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        // You can also allow all headers with "*"
+        configuration.setExposedHeaders(List.of("Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
+        configuration.setAllowCredentials(true); // If you need to allow credentials
         source.registerCorsConfiguration("/**",configuration);
 
         return source;

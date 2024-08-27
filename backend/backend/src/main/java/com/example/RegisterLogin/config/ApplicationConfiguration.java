@@ -22,10 +22,29 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    UserDetailsService userDetailsService() {
-        return username -> employeeRepo.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Employee not found with email: " + username));
+
+
+    public UserDetailsService userDetailsService() {
+        return identifier -> {
+            // Determine if the identifier is an email or an ID
+            if (isNumeric(identifier)) {
+                // Handle as ID
+                Integer employeeId = Integer.parseInt(identifier);
+                return employeeRepo.findById(employeeId)
+                        .orElseThrow(() -> new UsernameNotFoundException("Employee not found with ID: " + identifier));
+            } else {
+                // Handle as email
+                return employeeRepo.findByEmail(identifier)
+                        .orElseThrow(() -> new UsernameNotFoundException("Employee not found with email: " + identifier));
+            }
+        };
     }
+
+    private boolean isNumeric(String str) {
+        return str != null && str.matches("\\d+");  // This checks if the string contains only digits
+    }
+
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
