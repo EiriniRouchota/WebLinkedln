@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { AlertComponent } from './alert/alert.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { MysettingsComponent } from './mysettings/mysettings.component';
+import { MySettingsComponent } from './mysettings/mysettings.component';
 
 @NgModule({
   declarations: [
@@ -19,15 +19,10 @@ import { MysettingsComponent } from './mysettings/mysettings.component';
     HomeComponent,
     AlertComponent,
     NavbarComponent,
-    MysettingsComponent
+    MySettingsComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
