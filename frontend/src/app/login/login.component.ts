@@ -52,7 +52,7 @@ export class LoginComponent {
         },
         error: (error) => {
           console.error('There was an error during the login request', error);
-          alert('An error occurred during login. Please try again later.');
+          this.alertService.showAlert('danger', 'Wrong email or password');
         },
       });
   }
