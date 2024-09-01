@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AlertService } from '../services/alert.service'; // Import the AlertService
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -17,7 +19,11 @@ export class RegisterComponent {
   alertMessage: string = '';
   alertType: string = '';
 
-  constructor(private http: HttpClient, private alertService: AlertService) {} // Inject both services
+  constructor(
+    private http: HttpClient,
+    private alertService: AlertService,
+    private router: Router
+  ) {} // Inject both services
 
   save(registerForm: NgForm) {
     // Check if the form is valid
@@ -67,6 +73,10 @@ export class RegisterComponent {
               'success',
               'Employee Registered Successfully'
             );
+            // Delay the navigation by 3 seconds (3000 milliseconds)
+            setTimeout(() => {
+              this.router.navigateByUrl('/login');
+            }, 2000); // Adjust the time as needed
           }
         },
         error: (error) => {
