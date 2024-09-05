@@ -34,7 +34,7 @@ public class SecurityConfiguration {
 
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/employee/auth/**", "/api/v1/employee/login", "/api/v1/employee/save").permitAll() // Allow these endpoints without authentication
+                        .requestMatchers("/api/v1/employee/auth/**", "/api/v1/employee/login", "/api/v1/employee/save","api/institutions/*").permitAll() // Allow these endpoints without authentication
                         .anyRequest().authenticated() // Require authentication for all other requests
                 )
                 .sessionManagement(session -> session
