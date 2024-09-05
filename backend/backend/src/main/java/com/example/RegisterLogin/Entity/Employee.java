@@ -47,6 +47,8 @@ public class Employee implements UserDetails {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<Education> educations;
 
 
 
@@ -151,6 +153,13 @@ public class Employee implements UserDetails {
     }
 
 
+    public List<Education> getEducations() {
+        return educations;
+    }
+
+    public void setEducations(List<Education> educations) {
+        this.educations = educations;
+    }
     @Override
     public String toString() {
         return "Employee{" +

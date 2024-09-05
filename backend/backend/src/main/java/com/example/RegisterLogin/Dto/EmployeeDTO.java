@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.List;
+
 public class EmployeeDTO {
 
     private int employeeid;
@@ -14,14 +16,15 @@ public class EmployeeDTO {
     private String employeelastname;
     private String phone;
     private String newPassword;
-    // Constructor with parameters
-    public EmployeeDTO(int employeeid, String employeename, String email, String password, String employeelastname, String phone) {
+    private List<EducationDTO> educations;  // Optional, if you want to include education details    // Constructor with parameters
+    public EmployeeDTO(int employeeid, String employeename, String email, String password, String employeelastname, String phone,List<EducationDTO> educations) {
         this.employeeid = employeeid;
         this.employeename = employeename;
         this.email = email;
         this.password = password;
         this.employeelastname = employeelastname;
         this.phone = phone;
+        this.educations = educations;
     }
 
 

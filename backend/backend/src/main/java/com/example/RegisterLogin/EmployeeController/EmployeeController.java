@@ -57,12 +57,23 @@ public class EmployeeController {
     }
 
     @GetMapping(path="/auth/users/me")
-    public ResponseEntity<Employee> authenticatedUser() {
+    public ResponseEntity<EmployeeDTO> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Employee currentUser = (Employee) authentication.getPrincipal();
+        // Map Employee entity to EmployeeDTO
+        EmployeeDTO employeeDTO = new EmployeeDTO(
+                currentUser.getEmployeeid(),
+                currentUser.getEmployeename(),
 
-        return ResponseEntity.ok(currentUser);
+                currentUser.getEmail(),
+                currentUser.getPassword(),
+                currentUser.getEmployeelastname(),
+                currentUser.getPhone(), null
+
+                 // Optionally map Education to EducationDTO if needed
+        );
+        return ResponseEntity.ok(employeeDTO);
     }
 
 
