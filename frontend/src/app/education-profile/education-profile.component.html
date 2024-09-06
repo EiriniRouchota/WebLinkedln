@@ -1,0 +1,166 @@
+<div
+  class="container d-flex align-items-center justify-content-center min-vh-100"
+>
+  <div class="row w-100 justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg">
+        <div class="card-body p-4">
+          <h3 class="card-title text-center mb-4">Education Profile</h3>
+          <p class="text-center text-muted mb-4">Fill your education profile</p>
+
+          <!-- Initial Button to Add Education -->
+          <!-- This button is only shown if no forms exist -->
+          <button
+            *ngIf="educationForms.length === 0"
+            type="button"
+            class="btn btn-primary w-100 mb-4"
+            (click)="addEducationForm()"
+          >
+            Add Education
+          </button>
+
+          <!-- The form is only shown if at least one education form exists -->
+          <form
+            *ngIf="educationForms.length > 0"
+            #educationForm="ngForm"
+            (ngSubmit)="onSubmit()"
+            novalidate
+          >
+            <!-- Loop over education forms -->
+            <div
+              *ngFor="let education of educationForms; let i = index"
+              class="mb-5"
+            >
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <h5 class="m-0">Education #{{ i + 1 }}</h5>
+
+                <div class="button-group">
+                  <!-- Add Button -->
+                  <button
+                    type="button"
+                    class="btn btn-outline-success btn-sm me-2"
+                    (click)="addEducationForm()"
+                  >
+                    <i class="bi bi-plus"></i>
+                  </button>
+
+                  <!-- Delete Button -->
+                  <button
+                    type="button"
+                    class="btn btn-outline-dark btn-sm"
+                    (click)="removeEducationForm(i)"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Degree Field -->
+              <div class="form-group mb-3">
+                <label for="degree-{{ i }}" class="form-label"
+                  >Degree Title:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="education.degree"
+                  required
+                  id="degree-{{ i }}"
+                  name="degree-{{ i }}"
+                  placeholder="Enter your degree title"
+                  #degreeField="ngModel"
+                  [ngClass]="{
+                    'is-invalid': educationForm.submitted && degreeField.invalid
+                  }"
+                />
+                <div
+                  *ngIf="educationForm.submitted && degreeField.invalid"
+                  class="invalid-feedback"
+                >
+                  Degree is required.
+                </div>
+              </div>
+
+              <!-- Institution Dropdown -->
+              <div class="form-group mb-3">
+                <label for="institutionId-{{ i }}">Institution</label>
+                <select
+                  id="institutionId-{{ i }}"
+                  class="form-control"
+                  name="institutionId-{{ i }}"
+                  [(ngModel)]="education.institutionId"
+                  #institutionIdField="ngModel"
+                  required
+                >
+                  <option
+                    *ngFor="let institution of institutions"
+                    [value]="institution.id"
+                  >
+                    {{ institution.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="educationForm.submitted && institutionIdField.invalid"
+                  class="text-danger"
+                >
+                  Institution is required.
+                </div>
+              </div>
+
+              <!-- Start Date Field -->
+              <div class="form-group mb-3">
+                <label for="startDate-{{ i }}" class="form-label"
+                  >Start Date:</label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="education.startDate"
+                  required
+                  id="startDate-{{ i }}"
+                  name="startDate-{{ i }}"
+                />
+              </div>
+
+              <!-- End Date Field -->
+              <div class="form-group mb-3">
+                <label for="endDate-{{ i }}" class="form-label"
+                  >End Date:</label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="education.endDate"
+                  required
+                  id="endDate-{{ i }}"
+                  name="endDate-{{ i }}"
+                />
+              </div>
+
+              <!-- Is Public Checkbox -->
+              <div class="form-group form-check">
+                <input
+                  type="checkbox"
+                  id="isPublic-{{ i }}"
+                  class="form-check-input"
+                  [(ngModel)]="education.isPublic"
+                  name="isPublic-{{ i }}"
+                />
+                <label for="isPublic-{{ i }}" class="form-check-label"
+                  >Make education public</label
+                >
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100 py-2">
+              Save
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
