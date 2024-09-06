@@ -1,10 +1,15 @@
 package com.example.RegisterLogin.EmployeeController;
 
+import com.example.RegisterLogin.Dto.EducationDTO;
 import com.example.RegisterLogin.Dto.EmployeeDTO;
 import com.example.RegisterLogin.Dto.LoginDTO;
+import com.example.RegisterLogin.Entity.Education;
 import com.example.RegisterLogin.Entity.Employee;
+import com.example.RegisterLogin.Repo.EducationRepo;
+import com.example.RegisterLogin.Repo.InstitutionRepo;
 import com.example.RegisterLogin.Service.EmployeeService;
 import com.example.RegisterLogin.Service.JwtService;
+import com.example.RegisterLogin.response.EducationResponse;
 import com.example.RegisterLogin.response.LoginResponse;
 import com.example.RegisterLogin.response.UpdateEmployeeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +30,11 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
     private final JwtService jwtService;
+    @Autowired
+    private EducationRepo educationRepo;
 
+    @Autowired
+    private InstitutionRepo institutionRepo;
     public EmployeeController(JwtService jwtService) {
         this.jwtService = jwtService;
     }
@@ -90,4 +99,31 @@ public class EmployeeController {
 
         return ResponseEntity.ok(updateduser);
     }
+
+    @PostMapping(path = "/auth/add/educations") // Changed path to "educations" to reflect multiple entries
+    public ResponseEntity<List<EducationResponse>> addOrUpdateEducationsForCurrentUser(@RequestBody List<EducationDTO> educationDTOs) {
+        // Get the current authenticated user from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Employee currentUser = (Employee) authentication.getPrincipal();
+
+        // Call the service method to handle education updates and get the saved entities
+        List<EducationResponse> savedEducations = employeeService.addOrUpdateEducations(educationDTOs, currentUser);
+
+        // Return the list of saved educations
+        return ResponseEntity.ok(savedEducations);
+    }
+
+    @GetMapping(path = "/auth/me/educations")
+    public ResponseEntity<List<EducationResponse>> getAllEducationsForCurrentUser() {
+        // Get the current authenticated user from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Employee currentUser = (Employee) authentication.getPrincipal();
+        // Call the service method to get the list of education for the current user
+        List<EducationResponse> educationList = employeeService.getAllEducationsForEmployee(currentUser);
+
+        // Return the list of educations as the response
+        return ResponseEntity.ok(educationList);
+    }
+
+
 }
