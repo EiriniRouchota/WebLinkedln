@@ -1,5 +1,6 @@
 package com.example.RegisterLogin.EmployeeController;
 
+import com.example.RegisterLogin.Dto.InstitutionDTO;
 import com.example.RegisterLogin.Entity.Institution;
 import com.example.RegisterLogin.Repo.InstitutionRepo;
 import com.example.RegisterLogin.Service.EmployeeService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -29,9 +31,15 @@ public class InstitutionController {
         this.institutionRepository = institutionRepository;
     }
 
-    @GetMapping(path="/all")
-    public ResponseEntity<List<Institution>> getAllInstitutions() {
-        List<Institution> institutions = institutionRepository.findAll();
-        return ResponseEntity.ok(institutions);
+    @GetMapping("/all")
+    public List<InstitutionDTO> getAllInstitutions() {
+        // Fetch all institutions and map to DTOs
+        return employeeService.getAllInstitutions().stream()
+                .map(institution -> new InstitutionDTO(
+                        institution.getId(),
+                        institution.getName(),
+                        institution.getLocation()
+                ))
+                .collect(Collectors.toList());
     }
 }
