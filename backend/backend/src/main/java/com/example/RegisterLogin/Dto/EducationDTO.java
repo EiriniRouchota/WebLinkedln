@@ -1,45 +1,50 @@
 package com.example.RegisterLogin.Dto;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Date;
 
 public class EducationDTO {
     private int id;
     private String degree;
-    private String institution;
-    private String startDate;
-    private String endDate;
+    private int institutionId;
+    private Date startDate;
+    private Date endDate;
+    @JsonProperty("isPublic")
+    private boolean isPublic;
 
     public EducationDTO() {
     }
 
-    public EducationDTO(String degree, String institution, String startDate, String endDate, int id) {
+    public EducationDTO(String degree, int institutionId, Date startDate, Date endDate, int id, boolean isPublic) {
         this.degree = degree;
-        this.institution = institution;
+        this.institutionId = institutionId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.id = id;
+        this.isPublic = isPublic;
     }
 
-    public String getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
-    public String getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public String getInstitution() {
-        return institution;
+    public int getInstitutionId() {
+        return institutionId;
     }
 
-    public void setInstitution(String institution) {
-        this.institution = institution;
+    public void setInstitution(int institutionId) {
+        this.institutionId = institutionId;
     }
 
     public String getDegree() {
@@ -58,14 +63,24 @@ public class EducationDTO {
         this.id = id;
     }
 
+    @JsonProperty("isPublic")
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
     @Override
     public String toString() {
         return "EducationDTO{" +
                 "id=" + id +
                 ", degree='" + degree + '\'' +
-                ", institution='" + institution + '\'' +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
+                ", institution='" + institutionId + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", isPublic=" + isPublic +
                 '}';
     }
 }

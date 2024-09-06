@@ -35,6 +35,14 @@ public class Education {
     @Column(name = "is_public", nullable = false)
     private boolean isPublic;
 
+    @CreationTimestamp
+    @Column(updatable = false, name = "created_at")
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
     // Getters and Setters
 
     public int getId() {
