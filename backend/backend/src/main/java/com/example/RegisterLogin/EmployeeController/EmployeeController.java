@@ -2,6 +2,7 @@ package com.example.RegisterLogin.EmployeeController;
 
 import com.example.RegisterLogin.Dto.EducationDTO;
 import com.example.RegisterLogin.Dto.EmployeeDTO;
+import com.example.RegisterLogin.Dto.ExperienceDTO;
 import com.example.RegisterLogin.Dto.LoginDTO;
 import com.example.RegisterLogin.Entity.Education;
 import com.example.RegisterLogin.Entity.Employee;
@@ -10,6 +11,7 @@ import com.example.RegisterLogin.Repo.InstitutionRepo;
 import com.example.RegisterLogin.Service.EmployeeService;
 import com.example.RegisterLogin.Service.JwtService;
 import com.example.RegisterLogin.response.EducationResponse;
+import com.example.RegisterLogin.response.ExperienceResponse;
 import com.example.RegisterLogin.response.LoginResponse;
 import com.example.RegisterLogin.response.UpdateEmployeeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +102,7 @@ public class EmployeeController {
         return ResponseEntity.ok(updateduser);
     }
 
+    // Educations endpoints
     @PostMapping(path = "/auth/add/educations") // Changed path to "educations" to reflect multiple entries
     public ResponseEntity<List<EducationResponse>> addOrUpdateEducationsForCurrentUser(@RequestBody List<EducationDTO> educationDTOs) {
         // Get the current authenticated user from the security context
@@ -125,5 +128,30 @@ public class EmployeeController {
         return ResponseEntity.ok(educationList);
     }
 
+    //Experience endpoint one for inserting to db and one for get from it
 
+    @PostMapping(path = "/auth/add/experience") // Changed path to "educations" to reflect multiple entries
+    public ResponseEntity<List<ExperienceResponse>> addOrUpdateExperienceForCurrentUser(@RequestBody List<ExperienceDTO> experienceDTOS) {
+        // Get the current authenticated user from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Employee currentUser = (Employee) authentication.getPrincipal();
+
+        // Call the service method to handle education updates and get the saved entities
+        List<ExperienceResponse> savedExperience= employeeService.addOrUpdateExperience(experienceDTOS, currentUser);
+
+        // Return the list of saved educations
+        return ResponseEntity.ok(savedExperience);
+    }
+
+    @GetMapping(path = "/auth/me/experience")
+    public ResponseEntity<List<ExperienceResponse>> getAllExperienceForCurrentUser() {
+        // Get the current authenticated user from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Employee currentUser = (Employee) authentication.getPrincipal();
+        // Call the service method to get the list of education for the current user
+        List<ExperienceResponse> experienceList = employeeService.getAllExperienceForEmployee(currentUser);
+
+        // Return the list of educations as the response
+        return ResponseEntity.ok(experienceList);
+    }
 }

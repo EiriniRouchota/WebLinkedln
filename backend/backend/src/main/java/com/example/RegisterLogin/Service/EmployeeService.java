@@ -1,12 +1,10 @@
 package com.example.RegisterLogin.Service;
 
-import com.example.RegisterLogin.Dto.EducationDTO;
-import com.example.RegisterLogin.Dto.EmployeeDTO;
-import com.example.RegisterLogin.Dto.InstitutionDTO;
-import com.example.RegisterLogin.Dto.LoginDTO;
+import com.example.RegisterLogin.Dto.*;
 import com.example.RegisterLogin.Entity.Education;
 import com.example.RegisterLogin.Entity.Employee;
 import com.example.RegisterLogin.response.EducationResponse;
+import com.example.RegisterLogin.response.ExperienceResponse;
 import com.example.RegisterLogin.response.LoginResponse;
 import com.example.RegisterLogin.response.UpdateEmployeeResponse;
 import jakarta.transaction.Transactional;
@@ -29,7 +27,11 @@ public interface EmployeeService {
         // This ensures the delete and save operations are performed in a transaction
     List<EducationResponse> addOrUpdateEducations(List<EducationDTO> educationDTOs, Employee currentUser);
 
+    List<ExperienceResponse> addOrUpdateExperience(List<ExperienceDTO> experienceDTOs, Employee currentUser);
+
     List<InstitutionDTO> getAllInstitutions();
+
+    List<ExperienceResponse> getAllExperienceForEmployee(Employee employee);
 
 
     List<EducationResponse> getAllEducationsForEmployee(Employee employee);

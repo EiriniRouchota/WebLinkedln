@@ -1,18 +1,18 @@
 package com.example.RegisterLogin.Service.impl;
 
-import com.example.RegisterLogin.Dto.EducationDTO;
-import com.example.RegisterLogin.Dto.InstitutionDTO;
-import com.example.RegisterLogin.Dto.LoginDTO;
+import com.example.RegisterLogin.Dto.*;
 import com.example.RegisterLogin.Entity.Education;
+import com.example.RegisterLogin.Entity.Experience;
 import com.example.RegisterLogin.Entity.Institution;
 import com.example.RegisterLogin.Repo.EducationRepo;
 import com.example.RegisterLogin.Repo.EmployeeRepo;
-import com.example.RegisterLogin.Dto.EmployeeDTO;
 import com.example.RegisterLogin.Entity.Employee;
+import com.example.RegisterLogin.Repo.ExperienceRepo;
 import com.example.RegisterLogin.Repo.InstitutionRepo;
 import com.example.RegisterLogin.Service.EmployeeService;
 import com.example.RegisterLogin.Service.JwtService;
 import com.example.RegisterLogin.response.EducationResponse;
+import com.example.RegisterLogin.response.ExperienceResponse;
 import com.example.RegisterLogin.response.LoginResponse;
 import com.example.RegisterLogin.response.UpdateEmployeeResponse;
 import jakarta.transaction.Transactional;
@@ -40,6 +40,8 @@ public class EmployeeIMPL implements EmployeeService {
 
     private InstitutionRepo institutionRepo;
 
+    private ExperienceRepo experienceRepo;
+
     private EducationRepo educationRepo;
     @Autowired
     private JwtService jwtService;
@@ -52,11 +54,13 @@ public class EmployeeIMPL implements EmployeeService {
             EmployeeRepo employeeRepo,
             InstitutionRepo institutionRepo,
             EducationRepo educationRepo,
+            ExperienceRepo experienceRepo,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder
     ) {
         this.authenticationManager = authenticationManager;
         this.institutionRepo = institutionRepo;
+        this.experienceRepo = experienceRepo;
         this.educationRepo = educationRepo;
         this.employeeRepo = employeeRepo;
         this.passwordEncoder = passwordEncoder;
@@ -213,6 +217,59 @@ public class EmployeeIMPL implements EmployeeService {
         return savedEducations;
     }
 
+    @Transactional
+    public List<ExperienceResponse> addOrUpdateExperience(List<ExperienceDTO> experienceDTOS, Employee currentUser){
+
+        experienceRepo.deleteByEmployee(currentUser);
+
+        // List to store the responses
+        List<ExperienceResponse> experienceResponses = new ArrayList<>();
+
+        // Iterate through the list of new education DTOs
+        for (ExperienceDTO experienceDTO : experienceDTOS) {
+
+            // Create a new Experience entity
+            Experience experience = new Experience();
+            experience.setJobtitle(experienceDTO.getJobtitle());
+            experience.setCompanyname(experienceDTO.getCompanyname());
+            experience.setStartDate(experienceDTO.getStartDate());
+            experience.setEndDate(experienceDTO.getEndDate());
+            experience.setPublic(experienceDTO.isPublic());
+            experience.setDescription(experienceDTO.getDescription());
+            experience.setEmployee(currentUser);  // Associate with the current user
+
+            // Save the experience entity
+            Experience savedExperience = experienceRepo.save(experience);
+
+            // Create a response for the saved experience
+            ExperienceResponse experienceResponse = new ExperienceResponse(
+                    savedExperience.isPublic(),
+                    savedExperience.getStartDate(),
+                    savedExperience.getEndDate(),
+                    savedExperience.getDescription(),
+                    savedExperience.getCompanyname(),
+                    savedExperience.getJobtitle()
+            );
+
+            // Add the response to the list
+            experienceResponses.add(experienceResponse);
+        }
+
+        // Return the list of ExperienceResponse objects
+        return experienceResponses;
+    }
+
+
+
+    public List<ExperienceResponse> getAllExperienceForEmployee(Employee employee) {
+        // Fetch all education records for the current employee
+        List<Experience> experiences = experienceRepo.findByEmployee(employee);
+
+        // Convert to a list of EducationResponse DTOs
+        return experiences.stream()
+                .map(this::convertToExperienceResponse)
+                .collect(Collectors.toList());
+    }
 
     public List<InstitutionDTO> getAllInstitutions() {
         return institutionRepo.findAll().stream()
@@ -245,4 +302,21 @@ public class EmployeeIMPL implements EmployeeService {
         response.setPublic(education.isPublic());
         return response;
     }
+
+
+    private ExperienceResponse convertToExperienceResponse(Experience experience) {
+        ExperienceResponse response = new ExperienceResponse();
+        response.setJobtitle(experience.getJobtitle());
+        response.setCompanyname(experience.getCompanyname());
+        response.setDescription(experience.getDescription());
+        response.setStartDate(experience.getStartDate());
+        response.setEndDate(experience.getEndDate());
+        response.setPublic(experience.isPublic());
+        return response;
+    }
+
+
+
+
+
 }
