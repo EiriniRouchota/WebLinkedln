@@ -11,6 +11,7 @@ import { AlertComponent } from './alert/alert.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MySettingsComponent } from './mysettings/mysettings.component';
 import { EducationProfileComponent } from './education-profile/education-profile.component';
+import { ExperienceProfileComponent } from './experience-profile/experience-profile.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { EducationProfileComponent } from './education-profile/education-profile
     NavbarComponent,
     MySettingsComponent,
     EducationProfileComponent,
+    ExperienceProfileComponent,
   ],
   imports: [
     BrowserModule,

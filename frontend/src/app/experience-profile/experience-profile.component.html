@@ -1,0 +1,196 @@
+<div
+  class="container d-flex align-items-center justify-content-center min-vh-100"
+>
+  <div class="row w-100 justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg">
+        <div class="card-body p-4">
+          <h3 class="card-title text-center mb-4">Experience Profile</h3>
+          <p class="text-center text-muted mb-4">
+            Fill in your experience profile
+          </p>
+
+          <!-- Initial Button to Add Experience -->
+          <!-- This button is only shown if no forms exist -->
+          <button
+            *ngIf="experienceForms.length === 0"
+            type="button"
+            class="btn btn-primary w-100 mb-4"
+            (click)="addExperienceForm()"
+          >
+            Add Experience
+          </button>
+
+          <!-- The form is only shown if at least one experience form exists -->
+          <form
+            *ngIf="experienceForms.length > 0"
+            #experienceForm="ngForm"
+            (ngSubmit)="onSubmit()"
+            novalidate
+          >
+            <!-- Loop over experience forms -->
+            <div
+              *ngFor="let experience of experienceForms; let i = index"
+              class="mb-5"
+            >
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <h5 class="m-0">Experience #{{ i + 1 }}</h5>
+
+                <div class="button-group">
+                  <!-- Add Button -->
+                  <button
+                    type="button"
+                    class="btn btn-outline-success btn-sm me-2"
+                    (click)="addExperienceForm()"
+                  >
+                    <i class="bi bi-plus"></i>
+                  </button>
+
+                  <!-- Delete Button -->
+                  <button
+                    type="button"
+                    class="btn btn-outline-dark btn-sm"
+                    (click)="removeExperienceForm(i)"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Job Title Field -->
+              <div class="form-group mb-3">
+                <label for="jobtitle-{{ i }}" class="form-label"
+                  >Job Title:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="experience.jobtitle"
+                  required
+                  id="jobtitle-{{ i }}"
+                  name="jobtitle-{{ i }}"
+                  placeholder="Enter your job title"
+                  #jobTitleField="ngModel"
+                  [ngClass]="{
+                    'is-invalid':
+                      experienceForm.submitted && jobTitleField.invalid
+                  }"
+                />
+                <div
+                  *ngIf="experienceForm.submitted && jobTitleField.invalid"
+                  class="invalid-feedback"
+                >
+                  Job title is required.
+                </div>
+              </div>
+
+              <!-- Company Name Field -->
+              <div class="form-group mb-3">
+                <label for="companyname-{{ i }}" class="form-label"
+                  >Company Name:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="experience.companyname"
+                  required
+                  id="companyname-{{ i }}"
+                  name="companyname-{{ i }}"
+                  placeholder="Enter the company name"
+                  #companyNameField="ngModel"
+                  [ngClass]="{
+                    'is-invalid':
+                      experienceForm.submitted && companyNameField.invalid
+                  }"
+                />
+                <div
+                  *ngIf="experienceForm.submitted && companyNameField.invalid"
+                  class="invalid-feedback"
+                >
+                  Company name is required.
+                </div>
+              </div>
+
+              <!-- Description Field -->
+              <div class="form-group mb-3">
+                <label for="description-{{ i }}" class="form-label"
+                  >Description:</label
+                >
+                <textarea
+                  class="form-control"
+                  [(ngModel)]="experience.description"
+                  required
+                  id="description-{{ i }}"
+                  name="description-{{ i }}"
+                  placeholder="Describe your experience"
+                  #descriptionField="ngModel"
+                  [ngClass]="{
+                    'is-invalid':
+                      experienceForm.submitted && descriptionField.invalid
+                  }"
+                ></textarea>
+                <div
+                  *ngIf="experienceForm.submitted && descriptionField.invalid"
+                  class="invalid-feedback"
+                >
+                  Description is required.
+                </div>
+              </div>
+
+              <!-- Start Date Field -->
+              <div class="form-group mb-3">
+                <label for="startDate-{{ i }}" class="form-label"
+                  >Start Date:</label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="experience.startDate"
+                  required
+                  id="startDate-{{ i }}"
+                  name="startDate-{{ i }}"
+                />
+              </div>
+
+              <!-- End Date Field -->
+              <div class="form-group mb-3">
+                <label for="endDate-{{ i }}" class="form-label"
+                  >End Date:</label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="experience.endDate"
+                  required
+                  id="endDate-{{ i }}"
+                  name="endDate-{{ i }}"
+                />
+              </div>
+
+              <!-- Is Public Checkbox -->
+              <div class="form-group form-check">
+                <input
+                  type="checkbox"
+                  id="isPublic-{{ i }}"
+                  class="form-check-input"
+                  [(ngModel)]="experience.isPublic"
+                  name="isPublic-{{ i }}"
+                />
+                <label for="isPublic-{{ i }}" class="form-check-label"
+                  >Make experience public</label
+                >
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100 py-2">
+              Save Experience
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

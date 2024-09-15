@@ -6,6 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './auth.guard';
 import { MySettingsComponent } from './mysettings/mysettings.component';
 import { EducationProfileComponent } from './education-profile/education-profile.component';
+import { ExperienceProfileComponent } from './experience-profile/experience-profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
@@ -16,8 +17,17 @@ const routes: Routes = [
     component: MySettingsComponent,
     canActivate: [AuthGuard],
   },
-  {path: 'education-profile', component: EducationProfileComponent, canActivate: [AuthGuard]}
- , { path: '', redirectTo: '/login', pathMatch: 'full' },
+  {
+    path: 'experience-profile',
+    component: ExperienceProfileComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'education-profile',
+    component: EducationProfileComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' },
 ];
 
