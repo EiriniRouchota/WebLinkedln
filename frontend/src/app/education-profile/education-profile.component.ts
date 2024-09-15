@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../services/auth/auth.service';
+import { AlertService } from '../services/alert.service'; // Import the AlertService
 
 @Component({
   selector: 'app-education-profile',
@@ -21,7 +22,7 @@ export class EducationProfileComponent implements OnInit {
   // List of institutions
   institutions: any[] = [];
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService,private alertService: AlertService) {}
 
   ngOnInit(): void {
     this.educationForms = [];
@@ -128,11 +129,11 @@ export class EducationProfileComponent implements OnInit {
       .subscribe(
         (response) => {
           console.log('All educations saved successfully', response);
-          alert('Educations saved successfully!'); // Show success feedback
+          this.alertService.showAlert('success','Educations saved successfully!'); // Show success feedback
         },
         (error) => {
           console.error('Error saving educations', error);
-          alert('Error saving educations. Please try again.'); // Show error feedback
+          this.alertService.showAlert('danger','Error saving educations. Please try again.'); // Show error feedback
         }
       );
   }

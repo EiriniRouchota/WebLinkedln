@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
+import { AlertService } from '../services/alert.service'; // Import the AlertService
 
 @Component({
   selector: 'app-experience-profile',
@@ -20,7 +21,7 @@ export class ExperienceProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService ,private alertService: AlertService,) {}
 
   ngOnInit(): void {
     this.experienceForms = [];
@@ -122,11 +123,11 @@ export class ExperienceProfileComponent implements OnInit {
       .subscribe(
         (response) => {
           console.log('All experiences saved successfully', response);
-          alert('Experiences saved successfully!'); // Show success feedback
+          this.alertService.showAlert( 'success','Experiences saved successfully!'); // Show success feedback
         },
         (error) => {
           console.error('Error saving experiences', error);
-          alert('Error saving experiences. Please try again.'); // Show error feedback
+          this.alertService.showAlert('danger','Error saving experiences. Please try again.'); // Show error feedback
         }
       );
   }
