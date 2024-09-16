@@ -102,10 +102,26 @@ export class ExperienceProfileComponent implements OnInit {
         !form.endDate
     );
 
+    
+
     if (invalidForms) {
       console.error('Please fill out all fields.');
       return;
     }
+
+    // Validate that endDate is not before startDate
+    const invalidDates = this.experienceForms.some((form) => {
+      const startDate = new Date(form.startDate);
+      const endDate = new Date(form.endDate);
+      return endDate < startDate;
+    });
+
+    if (invalidDates) {
+      console.error('End date cannot be earlier than start date.');
+      this.alertService.showAlert('danger', 'End date cannot be earlier than start date.');
+      return;
+    }
+
 
     // Set the Authorization header with the token
     let headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
