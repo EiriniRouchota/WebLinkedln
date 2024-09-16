@@ -3,10 +3,7 @@ package com.example.RegisterLogin.Service;
 import com.example.RegisterLogin.Dto.*;
 import com.example.RegisterLogin.Entity.Education;
 import com.example.RegisterLogin.Entity.Employee;
-import com.example.RegisterLogin.response.EducationResponse;
-import com.example.RegisterLogin.response.ExperienceResponse;
-import com.example.RegisterLogin.response.LoginResponse;
-import com.example.RegisterLogin.response.UpdateEmployeeResponse;
+import com.example.RegisterLogin.response.*;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -31,9 +28,13 @@ public interface EmployeeService {
 
     List<InstitutionDTO> getAllInstitutions();
 
+    List<SkillDTO> getAllSkills();
+
+    List<SkillResponse> addOrUpdateSkills(List<SkillDTO> skillDTOS, Employee currentUser);
+
     List<ExperienceResponse> getAllExperienceForEmployee(Employee employee);
 
-
+    List<SkillResponse> getAllSkillsForEmployee(Employee currentUser);
     List<EducationResponse> getAllEducationsForEmployee(Employee employee);
 }
 

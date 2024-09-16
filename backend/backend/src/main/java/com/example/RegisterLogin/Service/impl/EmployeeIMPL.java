@@ -4,17 +4,12 @@ import com.example.RegisterLogin.Dto.*;
 import com.example.RegisterLogin.Entity.Education;
 import com.example.RegisterLogin.Entity.Experience;
 import com.example.RegisterLogin.Entity.Institution;
-import com.example.RegisterLogin.Repo.EducationRepo;
-import com.example.RegisterLogin.Repo.EmployeeRepo;
+import com.example.RegisterLogin.Repo.*;
 import com.example.RegisterLogin.Entity.Employee;
-import com.example.RegisterLogin.Repo.ExperienceRepo;
-import com.example.RegisterLogin.Repo.InstitutionRepo;
+import com.example.RegisterLogin.Entity.Skill;
 import com.example.RegisterLogin.Service.EmployeeService;
 import com.example.RegisterLogin.Service.JwtService;
-import com.example.RegisterLogin.response.EducationResponse;
-import com.example.RegisterLogin.response.ExperienceResponse;
-import com.example.RegisterLogin.response.LoginResponse;
-import com.example.RegisterLogin.response.UpdateEmployeeResponse;
+import com.example.RegisterLogin.response.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +24,7 @@ import org.springframework.security.core.AuthenticationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,10 +39,16 @@ public class EmployeeIMPL implements EmployeeService {
     private ExperienceRepo experienceRepo;
 
     private EducationRepo educationRepo;
+
+
+    private SkillRepo skillRepo;
+
     @Autowired
     private JwtService jwtService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+
 
     private final AuthenticationManager authenticationManager;
 
@@ -55,11 +57,13 @@ public class EmployeeIMPL implements EmployeeService {
             InstitutionRepo institutionRepo,
             EducationRepo educationRepo,
             ExperienceRepo experienceRepo,
+            SkillRepo skillRepo,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder
     ) {
         this.authenticationManager = authenticationManager;
         this.institutionRepo = institutionRepo;
+        this.skillRepo = skillRepo;
         this.experienceRepo = experienceRepo;
         this.educationRepo = educationRepo;
         this.employeeRepo = employeeRepo;
@@ -316,7 +320,45 @@ public class EmployeeIMPL implements EmployeeService {
     }
 
 
+    ///Skills
 
+    // Method to get all skills and convert them to SkillDTO
+    public List<SkillDTO> getAllSkills() {
+        return skillRepo.findAll().stream()
+                .map(skill -> new SkillDTO(skill.getId(), skill.getName()))
+                .collect(Collectors.toList());
+    }
+
+
+
+    public List<SkillResponse> addOrUpdateSkills(List<SkillDTO> skillDTOS, Employee currentUser) {
+        // Convert the skill DTOs into actual Skill entities
+        Set<Skill> skills = skillDTOS.stream()
+                .map(dto -> {
+                    Optional<Skill> existingSkill = skillRepo.findByName(dto.getName());
+                    return existingSkill.orElseGet(() -> skillRepo.save(new Skill(dto.getName())));
+                })
+                .collect(Collectors.toSet());
+
+        // Associate the skills with the current user
+        currentUser.setSkills(skills);
+        employeeRepo.save(currentUser);  // Save the employee with updated skills
+
+        // Return the updated skill list as responses
+        return skills.stream()
+                .map(skill -> new SkillResponse(skill.getId(), skill.getName()))
+                .collect(Collectors.toList());
+    }
+
+    public List<SkillResponse> getAllSkillsForEmployee(Employee currentUser) {
+        // Get the skills associated with the employee
+        Set<Skill> skills = currentUser.getSkills();
+
+        // Map the Skill entities to SkillResponse DTOs
+        return skills.stream()
+                .map(skill -> new SkillResponse(skill.getId(), skill.getName()))
+                .collect(Collectors.toList());
+    }
 
 
 }

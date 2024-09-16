@@ -1,19 +1,13 @@
 package com.example.RegisterLogin.EmployeeController;
 
-import com.example.RegisterLogin.Dto.EducationDTO;
-import com.example.RegisterLogin.Dto.EmployeeDTO;
-import com.example.RegisterLogin.Dto.ExperienceDTO;
-import com.example.RegisterLogin.Dto.LoginDTO;
+import com.example.RegisterLogin.Dto.*;
 import com.example.RegisterLogin.Entity.Education;
 import com.example.RegisterLogin.Entity.Employee;
 import com.example.RegisterLogin.Repo.EducationRepo;
 import com.example.RegisterLogin.Repo.InstitutionRepo;
 import com.example.RegisterLogin.Service.EmployeeService;
 import com.example.RegisterLogin.Service.JwtService;
-import com.example.RegisterLogin.response.EducationResponse;
-import com.example.RegisterLogin.response.ExperienceResponse;
-import com.example.RegisterLogin.response.LoginResponse;
-import com.example.RegisterLogin.response.UpdateEmployeeResponse;
+import com.example.RegisterLogin.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -153,5 +147,32 @@ public class EmployeeController {
 
         // Return the list of educations as the response
         return ResponseEntity.ok(experienceList);
+    }
+
+
+    @PostMapping("/auth/add/skills")
+    public ResponseEntity<List<SkillResponse>> addOrUpdateSkillsForCurrentUser(@RequestBody List<SkillDTO> skillDTOS) {
+        // Get the current authenticated user from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Employee currentUser = (Employee) authentication.getPrincipal();
+
+        // Call the service method to handle skill updates and get the saved entities
+        List<SkillResponse> savedSkills = employeeService.addOrUpdateSkills(skillDTOS, currentUser);
+
+        // Return the list of saved skills
+        return ResponseEntity.ok(savedSkills);
+    }
+
+    @GetMapping(path = "/auth/me/skills")
+    public ResponseEntity<List<SkillResponse>> getAllSkillsForCurrentUser() {
+        // Get the current authenticated user from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Employee currentUser = (Employee) authentication.getPrincipal();
+
+        // Call the service method to get the list of skills for the current user
+        List<SkillResponse> skillList = employeeService.getAllSkillsForEmployee(currentUser);
+
+        // Return the list of skills as the response
+        return ResponseEntity.ok(skillList);
     }
 }

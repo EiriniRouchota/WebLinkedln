@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="employee")
@@ -51,7 +52,14 @@ public class Employee implements UserDetails {
     private List<Education> educations;
 
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "employee_skill", // Join table name
+            joinColumns = @JoinColumn(name = "employee_id"), // Foreign key to employee
+            inverseJoinColumns = @JoinColumn(name = "skill_id") // Foreign key to skill
+    )
 
+    private Set<Skill> skills;
 
     // Constructor with parameters
     public Employee(String employeename, String employeelastname, String email, String password, String phone) {
@@ -159,6 +167,16 @@ public class Employee implements UserDetails {
 
     public void setEducations(List<Education> educations) {
         this.educations = educations;
+    }
+
+    // Getters and Setters
+
+    public Set<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        this.skills = skills;
     }
     @Override
     public String toString() {
