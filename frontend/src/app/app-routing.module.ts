@@ -7,6 +7,8 @@ import { AuthGuard } from './auth.guard';
 import { MySettingsComponent } from './mysettings/mysettings.component';
 import { EducationProfileComponent } from './education-profile/education-profile.component';
 import { ExperienceProfileComponent } from './experience-profile/experience-profile.component';
+import { profile } from 'console';
+import {  UserProfileComponent } from './user-profile/user-profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
@@ -15,6 +17,12 @@ const routes: Routes = [
   {
     path: 'my-settings',
     component: MySettingsComponent,
+    canActivate: [AuthGuard],
+  },
+
+  {
+    path: 'user-profile',
+    component: UserProfileComponent,
     canActivate: [AuthGuard],
   },
   {

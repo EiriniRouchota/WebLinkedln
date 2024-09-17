@@ -12,6 +12,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { MySettingsComponent } from './mysettings/mysettings.component';
 import { EducationProfileComponent } from './education-profile/education-profile.component';
 import { ExperienceProfileComponent } from './experience-profile/experience-profile.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ExperienceProfileComponent } from './experience-profile/experience-prof
     MySettingsComponent,
     EducationProfileComponent,
     ExperienceProfileComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,
