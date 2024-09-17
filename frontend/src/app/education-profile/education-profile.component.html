@@ -24,7 +24,7 @@
           <form
             *ngIf="educationForms.length > 0"
             #educationForm="ngForm"
-            (ngSubmit)="onSubmit()"
+            (ngSubmit)="onSubmit(educationForm)"
             novalidate
           >
             <!-- Loop over education forms -->
@@ -122,7 +122,18 @@
                   required
                   id="startDate-{{ i }}"
                   name="startDate-{{ i }}"
+                  #startDateField="ngModel"
+                  [ngClass]="{
+                    'is-invalid':
+                      educationForm.submitted && startDateField.invalid
+                  }"
                 />
+                <div
+                *ngIf="educationForm.submitted && startDateField.invalid"
+                class="invalid-feedback"
+              >
+                Start date is required.
+              </div>
               </div>
 
               <!-- End Date Field -->
@@ -137,7 +148,37 @@
                   required
                   id="endDate-{{ i }}"
                   name="endDate-{{ i }}"
+                  #endDateField="ngModel"
+                  [ngClass]="{
+                    'is-invalid':
+                      educationForm.submitted &&
+                      (endDateField.invalid ||
+                        !isEndDateValid(
+                          education.startDate,
+                          education.endDate
+                        ))
+                  }"
                 />
+                 <!-- Required field error message -->
+                 <div
+                 *ngIf="educationForm.submitted && endDateField.invalid"
+                 class="invalid-feedback"
+               >
+                 End date is required.
+               </div>
+
+               <!-- End Date must be after Start Date error message -->
+               <div
+                 *ngIf="
+                   educationForm.submitted &&
+                   !endDateField.invalid &&
+                   !isEndDateValid(education.startDate, education.endDate)
+                 "
+                 class="invalid-feedback"
+               >
+                 End date must be after the start date.
+               </div>
+
               </div>
 
               <!-- Is Public Checkbox -->
