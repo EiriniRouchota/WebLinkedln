@@ -21,7 +21,11 @@ export class ExperienceProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private http: HttpClient, private authService: AuthService ,private alertService: AlertService,) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
     this.experienceForms = [];
@@ -83,10 +87,27 @@ export class ExperienceProfileComponent implements OnInit {
     this.experienceForms.splice(index, 1);
   }
 
-  // Submit all forms in one batch
-  onSubmit(): void {
-    const token = this.authService.getToken(); // Retrieve the stored token
+  isEndDateValid(startDate: string, endDate: string): boolean {
+    if (!startDate || !endDate) return true; // No validation if one of the dates is missing
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return end > start;
+  }
 
+  // Check all experience forms for valid dates
+  areDatesValid(): boolean {
+    return this.experienceForms.every((experience) =>
+      this.isEndDateValid(experience.startDate, experience.endDate)
+    );
+  }
+  // Submit all forms in one batch
+  onSubmit(form: any): void {
+    const token = this.authService.getToken(); // Retrieve the stored token
+    if (form.invalid || !this.areDatesValid()) {
+      // Prevent form submission if invalid
+      console.log('Form is invalid or dates are incorrect.');
+      return;
+    }
     if (!token) {
       console.error('No token found, cannot make authenticated request');
       return;
@@ -102,26 +123,10 @@ export class ExperienceProfileComponent implements OnInit {
         !form.endDate
     );
 
-    
-
     if (invalidForms) {
       console.error('Please fill out all fields.');
       return;
     }
-
-    // Validate that endDate is not before startDate
-    const invalidDates = this.experienceForms.some((form) => {
-      const startDate = new Date(form.startDate);
-      const endDate = new Date(form.endDate);
-      return endDate < startDate;
-    });
-
-    if (invalidDates) {
-      console.error('End date cannot be earlier than start date.');
-      this.alertService.showAlert('danger', 'End date cannot be earlier than start date.');
-      return;
-    }
-
 
     // Set the Authorization header with the token
     let headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -139,11 +144,17 @@ export class ExperienceProfileComponent implements OnInit {
       .subscribe(
         (response) => {
           console.log('All experiences saved successfully', response);
-          this.alertService.showAlert( 'success','Experiences saved successfully!'); // Show success feedback
+          this.alertService.showAlert(
+            'success',
+            'Experiences saved successfully!'
+          ); // Show success feedback
         },
         (error) => {
           console.error('Error saving experiences', error);
-          this.alertService.showAlert('danger','Error saving experiences. Please try again.'); // Show error feedback
+          this.alertService.showAlert(
+            'danger',
+            'Error saving experiences. Please try again.'
+          ); // Show error feedback
         }
       );
   }

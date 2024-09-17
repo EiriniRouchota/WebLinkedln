@@ -26,7 +26,7 @@
           <form
             *ngIf="experienceForms.length > 0"
             #experienceForm="ngForm"
-            (ngSubmit)="onSubmit()"
+            (ngSubmit)="onSubmit(experienceForm)"
             novalidate
           >
             <!-- Loop over experience forms -->
@@ -139,7 +139,6 @@
                   Description is required.
                 </div>
               </div>
-
               <!-- Start Date Field -->
               <div class="form-group mb-3">
                 <label for="startDate-{{ i }}" class="form-label"
@@ -152,9 +151,19 @@
                   required
                   id="startDate-{{ i }}"
                   name="startDate-{{ i }}"
+                  #startDateField="ngModel"
+                  [ngClass]="{
+                    'is-invalid':
+                      experienceForm.submitted && startDateField.invalid
+                  }"
                 />
+                <div
+                  *ngIf="experienceForm.submitted && startDateField.invalid"
+                  class="invalid-feedback"
+                >
+                  Start date is required.
+                </div>
               </div>
-
               <!-- End Date Field -->
               <div class="form-group mb-3">
                 <label for="endDate-{{ i }}" class="form-label"
@@ -167,7 +176,36 @@
                   required
                   id="endDate-{{ i }}"
                   name="endDate-{{ i }}"
+                  #endDateField="ngModel"
+                  [ngClass]="{
+                    'is-invalid':
+                      experienceForm.submitted &&
+                      (endDateField.invalid ||
+                        !isEndDateValid(
+                          experience.startDate,
+                          experience.endDate
+                        ))
+                  }"
                 />
+                <!-- Required field error message -->
+                <div
+                  *ngIf="experienceForm.submitted && endDateField.invalid"
+                  class="invalid-feedback"
+                >
+                  End date is required.
+                </div>
+
+                <!-- End Date must be after Start Date error message -->
+                <div
+                  *ngIf="
+                    experienceForm.submitted &&
+                    !endDateField.invalid &&
+                    !isEndDateValid(experience.startDate, experience.endDate)
+                  "
+                  class="invalid-feedback"
+                >
+                  End date must be after the start date.
+                </div>
               </div>
 
               <!-- Is Public Checkbox -->
@@ -195,6 +233,3 @@
     </div>
   </div>
 </div>
-
-
-
