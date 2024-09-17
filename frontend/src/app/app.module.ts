@@ -13,14 +13,6 @@ import { MySettingsComponent } from './mysettings/mysettings.component';
 import { EducationProfileComponent } from './education-profile/education-profile.component';
 import { ExperienceProfileComponent } from './experience-profile/experience-profile.component';
 
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { SkillsComponent } from './skills/skills.component';
-// Import Angular Material modules
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Required for animations in Material
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +24,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
     MySettingsComponent,
     EducationProfileComponent,
     ExperienceProfileComponent,
-    SkillsComponent,
   ],
   imports: [
     BrowserModule,

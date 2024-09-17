@@ -1,0 +1,12 @@
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+  
+    // Apply styles to child components
+    app-education-profile,
+    app-experience-profile {
+      flex: 1; // This makes both components take equal width
+      margin: 10px; // Optional spacing
+    }
+  }
+

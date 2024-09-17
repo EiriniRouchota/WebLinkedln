@@ -19,10 +19,16 @@ export class EducationProfileComponent implements OnInit {
     },
   ];
 
+
   // List of institutions
   institutions: any[] = [];
 
-  constructor(private http: HttpClient, private authService: AuthService,private alertService: AlertService) {}
+  
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
     this.educationForms = [];
@@ -96,9 +102,30 @@ export class EducationProfileComponent implements OnInit {
     this.educationForms.splice(index, 1);
   }
 
+  isEndDateValid(startDate: string, endDate: string): boolean {
+    if (!startDate || !endDate) return true; // No validation if one of the dates is missing
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return end > start;
+  }
+
+  // Check all experience forms for valid dates
+  areDatesValid(): boolean {
+    return this.educationForms.every((education) =>
+      this.isEndDateValid(education.startDate, education.endDate)
+    );
+  }
+
   // Submit all forms in one batch
-  onSubmit(): void {
+  
+  onSubmit(form: any): void {
     const token = this.authService.getToken(); // Retrieve the stored token
+
+    if (form.invalid || !this.areDatesValid()) {
+      // Prevent form submission if invalid
+      console.log('Form is invalid or dates are incorrect.');
+      return;
+    }
 
     if (!token) {
       console.error('No token found, cannot make authenticated request');
@@ -129,11 +156,17 @@ export class EducationProfileComponent implements OnInit {
       .subscribe(
         (response) => {
           console.log('All educations saved successfully', response);
-          this.alertService.showAlert('success','Educations saved successfully!'); // Show success feedback
+          this.alertService.showAlert(
+            'success',
+            'Education saved successfully!'
+          ); // Show success feedback
         },
         (error) => {
           console.error('Error saving educations', error);
-          this.alertService.showAlert('danger','Error saving educations. Please try again.'); // Show error feedback
+          this.alertService.showAlert(
+            'danger',
+            'Error saving education. Please try again.'
+          ); // Show error feedback
         }
       );
   }

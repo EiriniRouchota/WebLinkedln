@@ -7,7 +7,6 @@ import { AuthGuard } from './auth.guard';
 import { MySettingsComponent } from './mysettings/mysettings.component';
 import { EducationProfileComponent } from './education-profile/education-profile.component';
 import { ExperienceProfileComponent } from './experience-profile/experience-profile.component';
-import { SkillsComponent } from './skills/skills.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
@@ -16,11 +15,6 @@ const routes: Routes = [
   {
     path: 'my-settings',
     component: MySettingsComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'skills',
-    component: SkillsComponent,
     canActivate: [AuthGuard],
   },
   {
