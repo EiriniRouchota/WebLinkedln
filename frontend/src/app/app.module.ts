@@ -12,6 +12,12 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { MySettingsComponent } from './mysettings/mysettings.component';
 import { EducationProfileComponent } from './education-profile/education-profile.component';
 import { ExperienceProfileComponent } from './experience-profile/experience-profile.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { SkillsComponent } from './skills/skills.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -24,6 +30,8 @@ import { ExperienceProfileComponent } from './experience-profile/experience-prof
     MySettingsComponent,
     EducationProfileComponent,
     ExperienceProfileComponent,
+    UserProfileComponent,
+    SkillsComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,10 +41,11 @@ import { ExperienceProfileComponent } from './experience-profile/experience-prof
     ReactiveFormsModule,
     BrowserAnimationsModule, // Angular Material requires animations
     MatFormFieldModule, // For <mat-form-field>
-    MatSelectModule, // For <mat-select>
-    MatButtonModule, // For <mat-button>
+    MatSelectModule,
+    CommonModule, // <-- Ensure CommonModule is imported here
+    FormsModule, // Other modules if needed // For <mat-select>
   ],
-  providers: [provideAnimationsAsync()],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {}
