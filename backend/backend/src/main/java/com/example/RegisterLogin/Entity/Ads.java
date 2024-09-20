@@ -58,12 +58,12 @@ public class Ads {
         this.description = description;
     }
 
-    public void setRemote(boolean remote) {
-        isRemote = remote;
+    public void setRemote(boolean isRemote) {
+        this.isRemote = isRemote;
     }
 
-    public void setFulltime(boolean fulltime) {
-        isFulltime = fulltime;
+    public void setFulltime(boolean isFulltime) {
+        this.isFulltime = isFulltime;
     }
 
 

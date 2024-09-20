@@ -360,7 +360,7 @@ public class EmployeeIMPL implements EmployeeService {
         newAd.setRemote(adsDTO.isRemote());
         newAd.setFulltime(adsDTO.isFulltime());
         newAd.setPostedDate(new Date()); // Set the current date
-        newAd.setStatus(true); // Assuming status is true when it's created
+        newAd.setStatus(adsDTO.isStatus()); // Assuming status is true when it's created
         newAd.setEmployee(currentUser); // Link the ad with the current user
 
         // Save the new ad to the database

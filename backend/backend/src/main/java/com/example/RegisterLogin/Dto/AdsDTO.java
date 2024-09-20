@@ -8,10 +8,12 @@ public class AdsDTO {
     private int id;
     private String companyname;
     private String description;
+    
     @JsonProperty("isRemote")
-    private boolean isRemote;
+    private boolean remote;  // Rename field from isRemote to remote
+
     @JsonProperty("isFulltime")
-    private boolean isFulltime;
+    private boolean fulltime;
     private Date postedDate;
     @JsonProperty("status")
     private boolean status;
@@ -22,15 +24,30 @@ public class AdsDTO {
     }
 
 
-    public AdsDTO(String companyname, String description,boolean isRemote, boolean isFulltime,boolean status, Date postedDate) {
+    public AdsDTO(String companyname, String description,boolean remote, boolean fulltime,boolean status, Date postedDate) {
         this.companyname = companyname;
         this.description = description;
-        this.isRemote = isRemote;
-        this.isFulltime = isFulltime;
+        this.remote = remote;
+        this.fulltime = fulltime;
         this.postedDate = postedDate;
         this.status = status;
     }
 
+    public boolean isRemote() {
+        return remote;
+    }
+
+    public void setRemote(boolean remote) {
+        this.remote = remote;
+    }
+
+    public boolean isFulltime() {
+        return fulltime;
+    }
+
+    public void setFulltime(boolean fulltime) {
+        this.fulltime = fulltime;
+    }
     public int getId() {
         return id;
     }
@@ -55,21 +72,10 @@ public class AdsDTO {
         this.description = description;
     }
 
-    public boolean isRemote() {
-        return isRemote;
-    }
 
-    public void setRemote(boolean remote) {
-        isRemote = remote;
-    }
 
-    public boolean isFulltime() {
-        return isFulltime;
-    }
 
-    public void setFulltime(boolean fulltime) {
-        isFulltime = fulltime;
-    }
+
 
     public Date getPostedDate() {
         return postedDate;
@@ -87,14 +93,15 @@ public class AdsDTO {
         this.status = status;
     }
 
+
     @Override
     public String toString() {
-        return "Ads{" +
+        return "AdsDTO{" +
                 "id=" + id +
                 ", companyname='" + companyname + '\'' +
                 ", description='" + description + '\'' +
-                ", isRemote=" + isRemote +
-                ", isFulltime=" + isFulltime +
+                ", remote=" + remote +
+                ", fulltime=" + fulltime +
                 ", postedDate=" + postedDate +
                 ", status=" + status +
                 '}';
