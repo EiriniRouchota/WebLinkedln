@@ -150,14 +150,15 @@ public class EmployeeController {
     }
 
 
+
     @PostMapping("/auth/add/skills")
-    public ResponseEntity<List<SkillResponse>> addOrUpdateSkillsForCurrentUser(@RequestBody List<SkillDTO> skillDTOS) {
+    public ResponseEntity<List<SkillResponse>> addOrUpdateSkillsForCurrentUser(@RequestBody List<Integer> skillIds) {
         // Get the current authenticated user from the security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Employee currentUser = (Employee) authentication.getPrincipal();
 
         // Call the service method to handle skill updates and get the saved entities
-        List<SkillResponse> savedSkills = employeeService.addOrUpdateSkills(skillDTOS, currentUser);
+        List<SkillResponse> savedSkills = employeeService.addOrUpdateSkills(skillIds, currentUser);
 
         // Return the list of saved skills
         return ResponseEntity.ok(savedSkills);

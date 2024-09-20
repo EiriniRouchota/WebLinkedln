@@ -6,6 +6,7 @@ import com.example.RegisterLogin.Entity.Employee;
 import com.example.RegisterLogin.response.*;
 import jakarta.transaction.Transactional;
 
+
 import java.util.List;
 
 
@@ -30,10 +31,9 @@ public interface EmployeeService {
 
     List<SkillDTO> getAllSkills();
 
-    List<SkillResponse> addOrUpdateSkills(List<SkillDTO> skillDTOS, Employee currentUser);
 
     List<ExperienceResponse> getAllExperienceForEmployee(Employee employee);
-
+    List<SkillResponse> addOrUpdateSkills(List<Integer> skillIds, Employee currentUser);
     List<SkillResponse> getAllSkillsForEmployee(Employee currentUser);
     List<EducationResponse> getAllEducationsForEmployee(Employee employee);
 }

@@ -331,14 +331,9 @@ public class EmployeeIMPL implements EmployeeService {
 
 
 
-    public List<SkillResponse> addOrUpdateSkills(List<SkillDTO> skillDTOS, Employee currentUser) {
-        // Convert the skill DTOs into actual Skill entities
-        Set<Skill> skills = skillDTOS.stream()
-                .map(dto -> {
-                    Optional<Skill> existingSkill = skillRepo.findByName(dto.getName());
-                    return existingSkill.orElseGet(() -> skillRepo.save(new Skill(dto.getName())));
-                })
-                .collect(Collectors.toSet());
+    public List<SkillResponse> addOrUpdateSkills(List<Integer> skillIds, Employee currentUser) {
+        // Fetch skills by their IDs
+        Set<Skill> skills = skillRepo.findAllById(skillIds).stream().collect(Collectors.toSet());
 
         // Associate the skills with the current user
         currentUser.setSkills(skills);
@@ -349,6 +344,7 @@ public class EmployeeIMPL implements EmployeeService {
                 .map(skill -> new SkillResponse(skill.getId(), skill.getName()))
                 .collect(Collectors.toList());
     }
+
 
     public List<SkillResponse> getAllSkillsForEmployee(Employee currentUser) {
         // Get the skills associated with the employee
