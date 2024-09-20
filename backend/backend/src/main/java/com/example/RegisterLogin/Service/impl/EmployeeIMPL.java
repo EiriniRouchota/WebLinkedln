@@ -1,12 +1,8 @@
 package com.example.RegisterLogin.Service.impl;
 
 import com.example.RegisterLogin.Dto.*;
-import com.example.RegisterLogin.Entity.Education;
-import com.example.RegisterLogin.Entity.Experience;
-import com.example.RegisterLogin.Entity.Institution;
+import com.example.RegisterLogin.Entity.*;
 import com.example.RegisterLogin.Repo.*;
-import com.example.RegisterLogin.Entity.Employee;
-import com.example.RegisterLogin.Entity.Skill;
 import com.example.RegisterLogin.Service.EmployeeService;
 import com.example.RegisterLogin.Service.JwtService;
 import com.example.RegisterLogin.response.*;
@@ -21,10 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.AuthenticationException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +33,7 @@ public class EmployeeIMPL implements EmployeeService {
 
     private EducationRepo educationRepo;
 
+    private AdsRepo adsRepo;
 
     private SkillRepo skillRepo;
 
@@ -58,6 +52,7 @@ public class EmployeeIMPL implements EmployeeService {
             EducationRepo educationRepo,
             ExperienceRepo experienceRepo,
             SkillRepo skillRepo,
+            AdsRepo adsRepo,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder
     ) {
@@ -66,6 +61,7 @@ public class EmployeeIMPL implements EmployeeService {
         this.skillRepo = skillRepo;
         this.experienceRepo = experienceRepo;
         this.educationRepo = educationRepo;
+        this.adsRepo=adsRepo;
         this.employeeRepo = employeeRepo;
         this.passwordEncoder = passwordEncoder;
     }
@@ -354,6 +350,30 @@ public class EmployeeIMPL implements EmployeeService {
         return skills.stream()
                 .map(skill -> new SkillResponse(skill.getId(), skill.getName()))
                 .collect(Collectors.toList());
+    }
+
+    public AdsDTO createJobAd(AdsDTO adsDTO, Employee currentUser) {
+
+        Ads newAd = new Ads();
+        newAd.setCompanyname(adsDTO.getCompanyname());
+        newAd.setDescription(adsDTO.getDescription());
+        newAd.setRemote(adsDTO.isRemote());
+        newAd.setFulltime(adsDTO.isFulltime());
+        newAd.setPostedDate(new Date()); // Set the current date
+        newAd.setStatus(true); // Assuming status is true when it's created
+        newAd.setEmployee(currentUser); // Link the ad with the current user
+
+        // Save the new ad to the database
+        Ads savedAd = adsRepo.save(newAd);
+
+        // Map savedAd back to AdsDTO
+        AdsDTO savedAdDTO = new AdsDTO();
+        savedAdDTO.setCompanyname(savedAd.getCompanyname());
+        savedAdDTO.setDescription(savedAd.getDescription());
+        savedAdDTO.setRemote(savedAd.isRemote());
+        savedAdDTO.setFulltime(savedAd.isFulltime());
+
+        return savedAdDTO;
     }
 
 

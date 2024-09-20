@@ -2,6 +2,8 @@ package com.example.RegisterLogin.Entity;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -33,8 +35,8 @@ public class Ads {
     private boolean isFulltime;
 
 
-    @Column(name = "posted_date")
-    @Temporal(TemporalType.DATE)
+    @CreationTimestamp
+    @Column(updatable = false, name = "postedDate")
     private Date postedDate;
 
     @Column(name = "status", nullable = false)
@@ -64,9 +66,6 @@ public class Ads {
         isFulltime = fulltime;
     }
 
-    public void setPostedDate(Date postedDate) {
-        this.postedDate = postedDate;
-    }
 
     public void setStatus(boolean status) {
         this.status = status;
@@ -98,6 +97,10 @@ public class Ads {
 
     public Date getPostedDate() {
         return postedDate;
+    }
+
+    public void setPostedDate(Date postedDate) {
+        this.postedDate = postedDate;
     }
 
     public boolean isStatus() {

@@ -31,7 +31,7 @@ public interface EmployeeService {
 
     List<SkillDTO> getAllSkills();
 
-
+    AdsDTO createJobAd(AdsDTO adsDTO, Employee currentUser);
     List<ExperienceResponse> getAllExperienceForEmployee(Employee employee);
     List<SkillResponse> addOrUpdateSkills(List<Integer> skillIds, Employee currentUser);
     List<SkillResponse> getAllSkillsForEmployee(Employee currentUser);
