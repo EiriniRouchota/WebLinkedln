@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   MatSelect,
   MatSelectChange,
   MatSelectModule,
 } from '@angular/material/select';
+import { AuthService } from '../services/auth/auth.service';
+import { AlertService } from '../services/alert.service';
 
 interface Skill {
   id: number;
@@ -20,12 +22,40 @@ export class SkillsComponent implements OnInit {
   skills: Skill[] = []; // List of all available skills
   selectedSkills: number[] = []; // List of selected skill IDs
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
     this.loadSkills();
+    this.loadUserSkills();
   }
 
+  // Load user's already selected skills
+  loadUserSkills(): void {
+    const token = this.authService.getToken(); // Retrieve the stored token
+    if (!token) {
+      console.error('No token found, cannot make authenticated request');
+      return;
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    // Get user's skills and pre-select them
+    this.http
+      .get('http://localhost:8080/api/v1/employee/auth/me/skills', { headers })
+      .subscribe(
+        (response: any) => {
+          this.selectedSkills = response.map((skill: Skill) => skill.id); // Explicitly type 'skill'
+          console.log('Selected skill IDs:', this.selectedSkills);
+        },
+        (error) => {
+          console.error('Error loading user skills', error);
+        }
+      );
+  }
   isSelectOpen = false; // Track whether the select is open or closed
 
   // This method will toggle the state when the user opens or closes the dropdown
@@ -73,16 +103,26 @@ export class SkillsComponent implements OnInit {
     );
     this.selectedSkills = selectedOptions;
   }
-  // Submit selected skills to the backend
   submitSkills(): void {
-    const payload = { selectedSkillIds: this.selectedSkills };
+    const token = this.authService.getToken(); // Retrieve the stored token
+    const payload = this.selectedSkills; // Directly send the array of selected skill IDs
+
+    if (!token) {
+      console.error('No token found, cannot make authenticated request');
+      return;
+    }
+
+    // Set the headers with the Bearer token
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http
-      .post('http://localhost:8080/api/employee/auth/add/skills', payload) // Replace with your actual API endpoint
+      .post('http://localhost:8080/api/v1/employee/auth/add/skills', payload, {
+        headers,
+      }) // Send the array directly
       .subscribe(
         (response) => {
           console.log('Skills submitted successfully', response);
-          alert('Skills submitted successfully!');
+          this.alertService.showAlert('success', 'Skills updated successfully');
         },
         (error) => {
           console.error('Error submitting skills', error);
