@@ -372,6 +372,8 @@ public class EmployeeIMPL implements EmployeeService {
         savedAdDTO.setDescription(savedAd.getDescription());
         savedAdDTO.setRemote(savedAd.isRemote());
         savedAdDTO.setFulltime(savedAd.isFulltime());
+        savedAdDTO.setPostedDate((savedAd.getPostedDate()));
+        savedAdDTO.setStatus(savedAd.isStatus());
 
         return savedAdDTO;
     }
