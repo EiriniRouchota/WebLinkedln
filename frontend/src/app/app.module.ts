@@ -18,6 +18,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SkillsComponent } from './skills/skills.component';
 import { CommonModule } from '@angular/common';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { CreateadsComponent } from './createads/createads.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { CommonModule } from '@angular/common';
     ExperienceProfileComponent,
     UserProfileComponent,
     SkillsComponent,
+    CreateadsComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,5 +50,10 @@ import { CommonModule } from '@angular/common';
   ],
 
   bootstrap: [AppComponent],
+
+  providers: [
+      provideAnimationsAsync()
+
+  ],
 })
 export class AppModule {}
