@@ -137,6 +137,19 @@ public class EmployeeController {
         return ResponseEntity.ok(savedExperience);
     }
 
+    @PostMapping(path = "/auth/add/ads") // Changed path to "educations" to reflect multiple entries
+    public ResponseEntity<List<AdsResponse>> addOrUpdateExperienceForCurrentUser(@RequestBody List<ExperienceDTO> experienceDTOS) {
+        // Get the current authenticated user from the security context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Employee currentUser = (Employee) authentication.getPrincipal();
+
+        // Call the service method to handle education updates and get the saved entities
+        List<ExperienceResponse> savedExperience= employeeService.addOrUpdateExperience(experienceDTOS, currentUser);
+
+        // Return the list of saved educations
+        return ResponseEntity.ok(savedExperience);
+    }
+
     @GetMapping(path = "/auth/me/experience")
     public ResponseEntity<List<ExperienceResponse>> getAllExperienceForCurrentUser() {
         // Get the current authenticated user from the security context
