@@ -1,11 +1,11 @@
 <div
   class="skills-selection-container"
-  style="position: relative; display: inline-block; width: 500px"
+  style="position: relative; display: inline-block; width: 1000px"
 >
-  <h3>Select Your Skills</h3>
+  <h5>Select Your Skills</h5>
 
   <!-- Multi-select dropdown for skills -->
-  <mat-form-field appearance="fill" style="width: 500px; position: relative">
+  <mat-form-field appearance="fill" style="width: 1420px; position: relative">
     <mat-label>Skills</mat-label>
     <mat-select
       #skillSelect="matSelect"
@@ -42,4 +42,11 @@
     ></i>
     <!-- Icon changes based on dropdown state -->
   </button>
+
+  <!-- Submit Button to trigger the submitSkills() function -->
+  <div style="margin-top: 10px">
+    <button class="btn btn-primary" (click)="submitSkills()">
+      Save Skills
+    </button>
+  </div>
 </div>

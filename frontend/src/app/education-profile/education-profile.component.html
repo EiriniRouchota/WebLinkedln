@@ -1,14 +1,13 @@
 <div
-  class="container d-flex align-items-center justify-content-center min-vh-100"
+  class="container-fluid d-flex align-items-center justify-content-center min-vh-100"
 >
   <div class="row w-100 justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow-lg">
+    <div class="col-12 col-md-8">
+      <div class="card shadow-lg w-100">
         <div class="card-body p-4">
           <h3 class="card-title text-center mb-4">Education Profile</h3>
           <p class="text-center text-muted mb-4">Fill your education profile</p>
 
-          <app-alert></app-alert>
           <!-- Initial Button to Add Education -->
           <!-- This button is only shown if no forms exist -->
           <button
@@ -129,11 +128,11 @@
                   }"
                 />
                 <div
-                *ngIf="educationForm.submitted && startDateField.invalid"
-                class="invalid-feedback"
-              >
-                Start date is required.
-              </div>
+                  *ngIf="educationForm.submitted && startDateField.invalid"
+                  class="invalid-feedback"
+                >
+                  Start date is required.
+                </div>
               </div>
 
               <!-- End Date Field -->
@@ -153,32 +152,28 @@
                     'is-invalid':
                       educationForm.submitted &&
                       (endDateField.invalid ||
-                        !isEndDateValid(
-                          education.startDate,
-                          education.endDate
-                        ))
+                        !isEndDateValid(education.startDate, education.endDate))
                   }"
                 />
-                 <!-- Required field error message -->
-                 <div
-                 *ngIf="educationForm.submitted && endDateField.invalid"
-                 class="invalid-feedback"
-               >
-                 End date is required.
-               </div>
+                <!-- Required field error message -->
+                <div
+                  *ngIf="educationForm.submitted && endDateField.invalid"
+                  class="invalid-feedback"
+                >
+                  End date is required.
+                </div>
 
-               <!-- End Date must be after Start Date error message -->
-               <div
-                 *ngIf="
-                   educationForm.submitted &&
-                   !endDateField.invalid &&
-                   !isEndDateValid(education.startDate, education.endDate)
-                 "
-                 class="invalid-feedback"
-               >
-                 End date must be after the start date.
-               </div>
-
+                <!-- End Date must be after Start Date error message -->
+                <div
+                  *ngIf="
+                    educationForm.submitted &&
+                    !endDateField.invalid &&
+                    !isEndDateValid(education.startDate, education.endDate)
+                  "
+                  class="invalid-feedback"
+                >
+                  End date must be after the start date.
+                </div>
               </div>
 
               <!-- Is Public Checkbox -->
@@ -198,7 +193,7 @@
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary w-100 py-2">
-              Save
+              Save Education
             </button>
           </form>
         </div>
