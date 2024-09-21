@@ -9,6 +9,7 @@ import { EducationProfileComponent } from './education-profile/education-profile
 import { ExperienceProfileComponent } from './experience-profile/experience-profile.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SkillsComponent } from './skills/skills.component';
+import { CreateadsComponent } from './createads/createads.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
@@ -27,6 +28,11 @@ const routes: Routes = [
   {
     path: 'user-profile',
     component: UserProfileComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'create-job-opening',
+    component: CreateadsComponent,
     canActivate: [AuthGuard],
   },
   {

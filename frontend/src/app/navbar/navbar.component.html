@@ -5,8 +5,8 @@
   <button
     class="navbar-toggler"
     type="button"
-    data-toggle="collapse"
-    data-target="#navbarNav"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarNav"
     aria-controls="navbarNav"
     aria-expanded="false"
     aria-label="Toggle navigation"
@@ -23,6 +23,32 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/about">About</a>
+      </li>
+
+      <!-- Job Posting Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="jobPostingDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Job Posting
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="jobPostingDropdown">
+          <li>
+            <a class="dropdown-item" routerLink="/create-job-opening"
+              >Create Job Opening</a
+            >
+          </li>
+          <li>
+            <a class="dropdown-item" routerLink="/job-searching"
+              >Job Searching</a
+            >
+          </li>
+        </ul>
       </li>
     </ul>
     <ul class="navbar-nav">
