@@ -1,1 +1,150 @@
-<p>createads works!</p>
+<app-navbar></app-navbar>
+<app-alert></app-alert>
+<div
+  class="container-fluid d-flex align-items-center justify-content-center min-vh-100"
+>
+  <div class="row w-100 justify-content-center">
+    <div class="col-12 col-md-8">
+      <div class="card shadow-lg w-100">
+        <div class="card-body p-4">
+          <h3 class="card-title text-center mb-4">Post Job Ad</h3>
+          <p class="text-center text-muted mb-4">Fill in the job details</p>
+
+          <!-- Initial Button to Add Job Ad Form -->
+          <!-- This button is only shown if no forms exist -->
+          <button
+            *ngIf="!jobAdFormExists"
+            type="button"
+            class="btn btn-primary w-100 mb-4"
+            (click)="addJobAdForm()"
+          >
+            Post Job Ad
+          </button>
+
+          <!-- The form is only shown if the job ad form exists -->
+          <form
+            *ngIf="jobAdFormExists"
+            #jobAdForm="ngForm"
+            (ngSubmit)="onSubmitJobAd(jobAdForm)"
+            novalidate
+          >
+            <!-- Company Name Field -->
+            <div class="form-group mb-3">
+              <label for="companyName" class="form-label">Company Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="jobAd.companyname"
+                required
+                id="companyName"
+                name="companyName"
+                placeholder="Enter the company name"
+                #companyNameField="ngModel"
+                [ngClass]="{
+                  'is-invalid': jobAdForm.submitted && companyNameField.invalid
+                }"
+              />
+              <div
+                *ngIf="jobAdForm.submitted && companyNameField.invalid"
+                class="invalid-feedback"
+              >
+                Company name is required.
+              </div>
+            </div>
+
+            <!-- Remote/On-site Toggle -->
+            <div class="form-group mb-3">
+              <label class="form-label">Remote/On-site:</label>
+              <div>
+                <label class="me-2">
+                  <input
+                    type="radio"
+                    [(ngModel)]="jobAd.isRemote"
+                    name="remoteStatus"
+                    [value]="true"
+                  />
+                  Remote
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    [(ngModel)]="jobAd.isRemote"
+                    name="remoteStatus"
+                    [value]="false"
+                  />
+                  On-site
+                </label>
+              </div>
+            </div>
+
+            <!-- Full/Part-time Toggle -->
+            <div class="form-group mb-3">
+              <label class="form-label">Full/Part-time:</label>
+              <div>
+                <label class="me-2">
+                  <input
+                    type="radio"
+                    [(ngModel)]="jobAd.isFulltime"
+                    name="jobType"
+                    [value]="true"
+                  />
+                  Full-time
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    [(ngModel)]="jobAd.isFulltime"
+                    name="jobType"
+                    [value]="false"
+                  />
+                  Part-time
+                </label>
+              </div>
+            </div>
+
+            <!-- Active Checkbox -->
+            <div class="form-group form-check mb-3">
+              <input
+                type="checkbox"
+                id="status"
+                class="form-check-input"
+                [(ngModel)]="jobAd.status"
+                name="status"
+              />
+              <label for="status" class="form-check-label">Active</label>
+            </div>
+
+            <!-- Description Field -->
+            <div class="form-group mb-3">
+              <label for="description" class="form-label">Description:</label>
+              <textarea
+                class="form-control"
+                [(ngModel)]="jobAd.description"
+                required
+                id="description"
+                name="description"
+                rows="4"
+                placeholder="Enter the job description"
+                #descriptionField="ngModel"
+                [ngClass]="{
+                  'is-invalid': jobAdForm.submitted && descriptionField.invalid
+                }"
+              ></textarea>
+              <div
+                *ngIf="jobAdForm.submitted && descriptionField.invalid"
+                class="invalid-feedback"
+              >
+                Description is required.
+              </div>
+            </div>
+
+            <!-- Create Job Ad Button -->
+            <button type="submit" class="btn btn-primary w-100 py-2">
+              Create Job Ad
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
