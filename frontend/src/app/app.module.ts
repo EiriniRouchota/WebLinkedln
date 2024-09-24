@@ -40,6 +40,7 @@ import { CreateadsComponent } from './createads/createads.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule, // Angular Material requires animations
@@ -51,9 +52,6 @@ import { CreateadsComponent } from './createads/createads.component';
 
   bootstrap: [AppComponent],
 
-  providers: [
-      provideAnimationsAsync()
-
-  ],
+  providers: [provideAnimationsAsync()],
 })
 export class AppModule {}

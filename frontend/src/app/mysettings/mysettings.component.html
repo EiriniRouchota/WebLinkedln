@@ -8,9 +8,64 @@
       <div class="card shadow-lg">
         <div class="card-body p-4">
           <h3 class="card-title text-center mb-4">My Settings</h3>
-          <form #loginForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+          <form
+            #loginForm="ngForm"
+            enctype="multipart/form-data"
+            (ngSubmit)="onSubmit()"
+            novalidate
+          >
             <!-- Email Field -->
             <app-alert></app-alert>
+            <!-- Photo Upload Field -->
+
+            <div class="mb-3">
+              <label for="employeename" class="form-label">First Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="employeename"
+                required
+                id="employeename"
+                name="employeename"
+                placeholder="Enter your first name"
+                #employeenameField="ngModel"
+                [ngClass]="{
+                  'is-invalid': loginForm.submitted && employeenameField.invalid
+                }"
+              />
+              <div
+                *ngIf="loginForm.submitted && employeenameField.invalid"
+                class="invalid-feedback"
+              >
+                First name is required.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="employeelastname" class="form-label"
+                >Last Name:</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="employeelastname"
+                required
+                id="employeelastname"
+                name="employeelastname"
+                placeholder="Enter your last name"
+                #employeelastnameField="ngModel"
+                [ngClass]="{
+                  'is-invalid':
+                    loginForm.submitted && employeelastnameField.invalid
+                }"
+              />
+              <div
+                *ngIf="loginForm.submitted && employeelastnameField.invalid"
+                class="invalid-feedback"
+              >
+                Last name is required.
+              </div>
+            </div>
             <div class="mb-3">
               <label for="email" class="form-label">Email:</label>
               <input
@@ -106,6 +161,19 @@
                 class="invalid-feedback"
               >
                 Confirming your new password is required.
+              </div>
+              <br />
+              <div class="mb-3">
+                <label for="photo" class="form-label"
+                  >Upload Profile Photo:</label
+                >
+                <input
+                  type="file"
+                  class="form-control"
+                  id="photo"
+                  name="photo"
+                  (change)="onFileSelected($event)"
+                />
               </div>
             </div>
 

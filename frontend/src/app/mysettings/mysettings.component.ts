@@ -18,8 +18,10 @@ export class MySettingsComponent implements OnInit {
   password: string = '';
   newPassword: string = '';
   confirmNewPassword: string = '';
-  hashedPassword: string = ''; // Add a property to store the hashed password
-
+  hashedPassword: string = '';
+  employeename: string = '';
+  employeelastname: string = '';
+  selectedFile: File | null = null;
   constructor(
     private http: HttpClient,
     private authService: AuthService,
@@ -29,9 +31,12 @@ export class MySettingsComponent implements OnInit {
   ngOnInit(): void {
     this.getUserProfile();
   }
-
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
   onSubmit() {
-    if (this.confirmNewPassword != this.newPassword) {
+    // Check if the new passwords match
+    if (this.confirmNewPassword !== this.newPassword) {
       this.alertService.showAlert(
         'warning',
         'New Password and confirm password must match'
@@ -46,26 +51,40 @@ export class MySettingsComponent implements OnInit {
       return;
     }
 
+    // Prepare the FormData object to send file and form data
+    const formData = new FormData();
+
+    // Append text fields as part of the form data
+    formData.append(
+      'employee',
+      JSON.stringify({
+        email: this.email,
+        password: this.password,
+        newPassword: this.newPassword,
+        employeename: this.employeename,
+        employeelastname: this.employeelastname,
+      })
+    );
+
+    // Append the selected file (photo) if it exists
+    if (this.selectedFile) {
+      formData.append('photo', this.selectedFile);
+    }
+
     // Set the Authorization header with the token
-    let headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    // Prepare the request body
-    let bodyData = {
-      email: this.email,
-      password: this.password,
-      newPassword: this.newPassword,
-    };
-
-    // Send the POST request with headers and body data
+    // Send the POST request with headers and FormData
     this.http
       .post(
         'http://localhost:8080/api/v1/employee/auth/users/me/update',
-        bodyData,
+        formData,
         { headers }
       )
       .subscribe({
         next: (data: any) => {
           console.log('User profile updated:', data);
+
           if (data.message === 'Profile updated successfully.') {
             this.alertService.showAlert(
               'success',
@@ -73,17 +92,21 @@ export class MySettingsComponent implements OnInit {
             );
           } else if (data.message === 'Your password is incorrect') {
             this.alertService.showAlert('danger', 'Your password is incorrect');
-          } else {
+          } else if (
             data.message ===
-              'Email is already in use. Try again with a different email.';
+            'Email is already in use. Try again with a different email.'
+          ) {
             this.alertService.showAlert(
               'warning',
               'Email is already in use. Try again with a different email.'
-            ); // Handle other cases if needed
+            );
+          } else {
+            this.alertService.showAlert('danger', 'An error occurred.');
           }
         },
         error: (error) => {
           console.error('Error updating user profile:', error);
+          this.alertService.showAlert('danger', 'Error updating profile.');
         },
       });
   }
@@ -104,6 +127,8 @@ export class MySettingsComponent implements OnInit {
         next: (data: any) => {
           console.log('User profile data:', data);
           this.email = data.email;
+          this.employeename = data.employeename;
+          this.employeelastname = data.employeelastname;
         },
         error: (error) => {
           console.error('Error fetching user profile:', error);
