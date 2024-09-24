@@ -51,6 +51,10 @@ public class Employee implements UserDetails {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
     private List<Education> educations;
 
+    // One-to-One relationship with Photo
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Photo photo;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -177,6 +181,14 @@ public class Employee implements UserDetails {
 
     public void setSkills(Set<Skill> skills) {
         this.skills = skills;
+    }
+    public Photo getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Photo photo) {
+        this.photo = photo;
+        photo.setEmployee(this); // Bidirectional linkage
     }
     @Override
     public String toString() {

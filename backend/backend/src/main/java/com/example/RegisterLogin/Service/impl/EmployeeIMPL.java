@@ -16,7 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +40,7 @@ public class EmployeeIMPL implements EmployeeService {
 
     private SkillRepo skillRepo;
 
+    private PhotoRepo photoRepo;
     @Autowired
     private JwtService jwtService;
     @Autowired
@@ -52,6 +56,7 @@ public class EmployeeIMPL implements EmployeeService {
             EducationRepo educationRepo,
             ExperienceRepo experienceRepo,
             SkillRepo skillRepo,
+            PhotoRepo photoRepo,
             AdsRepo adsRepo,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder
@@ -59,6 +64,7 @@ public class EmployeeIMPL implements EmployeeService {
         this.authenticationManager = authenticationManager;
         this.institutionRepo = institutionRepo;
         this.skillRepo = skillRepo;
+        this.photoRepo = photoRepo;
         this.experienceRepo = experienceRepo;
         this.educationRepo = educationRepo;
         this.adsRepo=adsRepo;
@@ -112,39 +118,107 @@ public class EmployeeIMPL implements EmployeeService {
 
 
     @Override
-    public UpdateEmployeeResponse updateEmployee(EmployeeDTO employeeDTO, Employee currentUser) {
+    public UpdateEmployeeResponse updateEmployee(EmployeeDTO employeeDTO, MultipartFile photo, Employee currentUser) {
         // Check if the current password is correct
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String manuallyHashedPassword = passwordEncoder.encode(employeeDTO.getPassword());
-        System.out.println("Manually hashed password: " + manuallyHashedPassword);
 
         if (!passwordEncoder.matches(employeeDTO.getPassword(), currentUser.getPassword())) {
-
-
             return new UpdateEmployeeResponse("Your password is incorrect", null);
         }
 
         // Check if the new email is already in use by another user (excluding the current user)
         Optional<Employee> existingEmployee = employeeRepo.findByEmail(employeeDTO.getEmail());
-
         if (existingEmployee.isPresent() && !existingEmployee.get().getEmployeeid().equals(currentUser.getEmployeeid())) {
             return new UpdateEmployeeResponse("Email is already in use. Try again with a different email.", null);
         }
 
-
-
+        // Update employee's email
         currentUser.setEmail(employeeDTO.getEmail());
+
         // Update password if a new one is provided
         if (employeeDTO.getNewPassword() != null && !employeeDTO.getNewPassword().isEmpty()) {
             currentUser.setPassword(passwordEncoder.encode(employeeDTO.getNewPassword()));
         }
 
+        // Update other fields (name, lastname, etc.)
+        currentUser.setEmployeelastname(employeeDTO.getEmployeelastname());
+        currentUser.setEmployeename(employeeDTO.getEmployeename());
+
+        // Handle photo update if a new photo is uploaded
+        if (photo != null && !photo.isEmpty()) {
+            try {
+                // If the user already has a photo, delete the old one
+                if (currentUser.getPhoto() != null) {
+                    deleteExistingPhoto(currentUser.getPhoto());  // Delete the previous photo from the filesystem
+                }
+                // Save the photo and associate it with the employee
+                Photo updatedPhoto = savePhoto(photo, currentUser);
+                //currentUser.setPhoto(updatedPhoto); // Set the new photo to the employee
+            } catch (IOException e) {
+                throw new RuntimeException("Error uploading photo", e);
+            }
+        }
 
         // Save the updated employee back to the repository
         Employee updatedEmployee = employeeRepo.save(currentUser);
 
         return new UpdateEmployeeResponse("Profile updated successfully.", updatedEmployee);
     }
+
+    public Photo savePhoto(MultipartFile file, Employee employee) throws IOException {
+        // Define the directory where files will be saved
+        String uploadDir = "C:/uploads/";
+
+        // Ensure the upload directory exists
+        File uploadDirectory = new File(uploadDir);
+        if (!uploadDirectory.exists()) {
+            if (!uploadDirectory.mkdirs()) {
+                throw new IOException("Failed to create upload directory");
+            }
+        }
+
+        // Create a unique filename for the photo
+        String originalFilename = file.getOriginalFilename();
+        String filePath = uploadDir + System.currentTimeMillis() + "-" + originalFilename;
+
+        // Save the file to the file system
+        File dest = new File(filePath);
+        try {
+            file.transferTo(dest);  // Save the file
+            System.out.println("File uploaded successfully: " + dest.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();  // Log the detailed error stack trace
+            System.err.println("Error saving file: " + e.getMessage());
+            throw new IOException("Error saving file to disk", e);
+        }
+        // Save photo details in the database
+        Photo photo = new Photo();
+        photo.setFilename(originalFilename);
+        photo.setFilepath(filePath);
+        photo.setFiletype(file.getContentType());
+        photo.setEmployee(employee);
+
+        return photoRepo.save(photo);  // Save photo to database
+    }
+
+    public void deleteExistingPhoto(Photo photo) {
+        String filePath = photo.getFilepath();  // Get the path of the existing photo from the database
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("Deleted previous photo: " + filePath);
+            } else {
+                System.err.println("Failed to delete previous photo: " + filePath);
+            }
+        } else {
+            System.err.println("Previous photo not found: " + filePath);
+        }
+
+        // Remove photo reference from the database (optional)
+        photoRepo.delete(photo);  // Ensure this removes the old photo reference in your database
+    }
+
 
 
 
@@ -377,6 +451,8 @@ public class EmployeeIMPL implements EmployeeService {
 
         return savedAdDTO;
     }
+
+
 
 
 }

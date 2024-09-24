@@ -5,6 +5,7 @@ import com.example.RegisterLogin.Entity.Education;
 import com.example.RegisterLogin.Entity.Employee;
 import com.example.RegisterLogin.response.*;
 import jakarta.transaction.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
@@ -13,8 +14,7 @@ import java.util.List;
 public interface EmployeeService {
     Employee addEmployee(EmployeeDTO employeeDTO);
 
-    UpdateEmployeeResponse updateEmployee(EmployeeDTO employeeDTO, Employee currentUser);
-
+    UpdateEmployeeResponse updateEmployee(EmployeeDTO employeeDTO, MultipartFile photo, Employee currentUser);
     LoginResponse loginEmployee(LoginDTO loginDTO);
 
     Employee authenticate(LoginDTO loginDTO);

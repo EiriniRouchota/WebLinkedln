@@ -8,11 +8,14 @@ import com.example.RegisterLogin.Repo.InstitutionRepo;
 import com.example.RegisterLogin.Service.EmployeeService;
 import com.example.RegisterLogin.Service.JwtService;
 import com.example.RegisterLogin.response.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -82,20 +85,29 @@ public class EmployeeController {
     }
 
 
-    @PostMapping(path="/auth/users/me/update")
+    @PostMapping(path = "/auth/users/me/update", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> updateProfile(
+            @RequestParam("employee") String employeeJson, // employee details as JSON string
+            @RequestParam(value = "photo", required = false) MultipartFile photo // photo as file
+    ) {
+        // Parse the employee JSON string into EmployeeDTO
+        ObjectMapper objectMapper = new ObjectMapper();
+        EmployeeDTO updateProfileRequest;
+        try {
+            updateProfileRequest = objectMapper.readValue(employeeJson, EmployeeDTO.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Invalid employee data");
+        }
 
-    public ResponseEntity<?> updateProfile(@RequestBody EmployeeDTO updateProfileRequest) {
+        // Get the current user from the authentication context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Employee currentUser = (Employee) authentication.getPrincipal();
-       //Employee currentUser = (Employee) authentication.getDetails(); // Get the email or username from the authentication object
 
+        // Update employee profile and photo
+        UpdateEmployeeResponse updatedUser = employeeService.updateEmployee(updateProfileRequest, photo, currentUser);
 
-        UpdateEmployeeResponse updateduser = employeeService.updateEmployee(updateProfileRequest, currentUser);
-
-
-        return ResponseEntity.ok(updateduser);
+        return ResponseEntity.ok(updatedUser);
     }
-
     // Educations endpoints
     @PostMapping(path = "/auth/add/educations") // Changed path to "educations" to reflect multiple entries
     public ResponseEntity<List<EducationResponse>> addOrUpdateEducationsForCurrentUser(@RequestBody List<EducationDTO> educationDTOs) {

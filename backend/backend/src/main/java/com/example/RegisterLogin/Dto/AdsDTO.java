@@ -8,7 +8,7 @@ public class AdsDTO {
     private int id;
     private String companyname;
     private String description;
-    
+
     @JsonProperty("isRemote")
     private boolean remote;  // Rename field from isRemote to remote
 
